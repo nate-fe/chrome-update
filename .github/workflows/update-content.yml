@@ -6,7 +6,7 @@ name: 콘텐츠 자동 업데이트
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 매일 09:00 (한국 시간)
+    - cron: '2 0 * * *' # 매일 09:02 (한국 시간 = UTC 00:02)
   workflow_dispatch:
 
 permissions:

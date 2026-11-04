@@ -17,7 +17,6 @@ import './globals.css';
 export const metadata: Metadata = {
   title: { default: 'Chrome 웹 플랫폼 변경사항', template: '%s · Chrome 변경사항' },
   description: 'Chrome stable·베타의 CSS, JS/Web API, deprecated·제거 변경사항을 한국어로 정리합니다.',
-  alternates: { types: { 'application/rss+xml': `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/feed.xml` } },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       items: [
         { href: '/features', label: 'search', ext: '.ts', pill: <span className="muted">{features.length}</span> },
         { href: '/compare', label: 'compare', ext: '.diff' },
-        { href: '/feed.xml', label: 'feed', ext: '.xml' },
       ],
     },
   ];
