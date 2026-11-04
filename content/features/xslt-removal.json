@@ -1,0 +1,53 @@
+{
+  "slug": "xslt-removal",
+  "chromestatusId": 4709671889534976,
+  "title": "XSLT 제거",
+  "category": "deprecation",
+  "impact": "removed",
+  "status": "removed",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 143,
+      "channel": "mention",
+      "note": "deprecated 표시 (제거 예고)"
+    },
+    {
+      "milestone": 152,
+      "channel": "mention",
+      "note": "오리진 트라이얼·엔터프라이즈 정책 시작 (176까지 계속 사용 가능)"
+    },
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "Stable에서 동작 중지 (ChromeStatus: Stepped rollout)"
+    }
+  ],
+  "summaryKo": "158 Stable부터 브라우저 안의 XSLT 처리(`XSLTProcessor`, XML 문서의 XSL 처리 명령)가 동작하지 않는다.",
+  "whyKo": "XSLT를 처리하는 libxslt는 오래된 C 코드라 보안 취약점이 잇따랐고, 웹에서의 사용량은 아주 적다. Firefox와 Safari도 제거를 계획하고 있다.",
+  "exampleLang": "js",
+  "exampleCode": "if (typeof XSLTProcessor === 'undefined') {\n  // 158부터: 서버에서 변환한 결과를 받아 쓴다\n  const res = await fetch('/report.html');\n  view.innerHTML = await res.text();\n}",
+  "guideKo": "XSLT로 화면을 만드는 페이지는 서버에서 미리 변환하거나 Saxonica 같은 JS 라이브러리로 바꾼다. 당장 옮기기 어렵다면 오리진 트라이얼이나 엔터프라이즈 정책으로 176까지 계속 쓸 수 있다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/4709671889534976",
+    "https://developer.chrome.com/docs/web-platform/deprecating-xslt",
+    "https://github.com/whatwg/html/issues/11523"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

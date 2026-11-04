@@ -1,0 +1,7 @@
+{
+  "milestone": 158,
+  "status": "beta",
+  "stableDate": "2026-11-17",
+  "headlineKo": "미디어 상태는 CSS로, XSLT는 작별",
+  "summaryKo": "미디어 상태 의사 클래스와 `::highlight(*)`, 웹 앱 설치 `navigator.install()`·`<install>`이 나오고, XSLT가 Stable에서 제거된다."
+}

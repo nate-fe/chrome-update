@@ -1,0 +1,46 @@
+{
+  "slug": "focus-without-user-activation",
+  "chromestatusId": 5179186249465856,
+  "title": "권한 정책 `focus-without-user-activation`",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "임베드한 콘텐츠가 사용자 조작 없이 `focus()` 등으로 포커스를 가져가지 못하게 막는 권한 정책이 추가된다.",
+  "whyKo": "광고나 위젯 iframe이 몰래 포커스를 가져가 키 입력을 빼앗는 문제를 막을 수 있다. 예전에는 `sandbox`로 JS를 통째로 끄는 것 말고는 확실한 방법이 없었다.",
+  "exampleLang": "html",
+  "exampleCode": "<iframe\n  src=\"https://ads.example.com/banner\"\n  allow=\"focus-without-user-activation 'none'\"\n></iframe>",
+  "guideKo": "클릭이나 Tab 같은 사용자 조작으로 옮기는 포커스는 막지 않는다. `Permissions-Policy` 응답 헤더로도 설정할 수 있다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "js",
+    "expr": "(document.featurePolicy?.features?.() ?? []).includes('focus-without-user-activation')"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5179186249465856",
+    "https://html.spec.whatwg.org/#focus-without-user-activation-feature"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

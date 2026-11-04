@@ -4,7 +4,7 @@
   "title": "`text-overflow: <string>`",
   "category": "css",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 157,
   "tags": [],
   "history": [

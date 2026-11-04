@@ -1,0 +1,46 @@
+{
+  "slug": "highlight-universal",
+  "chromestatusId": 5174965228929024,
+  "title": "`::highlight(*)` 전체 하이라이트 선택자",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`::highlight(*)`로 이름과 관계없이 모든 사용자 정의 하이라이트를 한 번에 꾸민다.",
+  "whyKo": "하이라이트 이름마다 같은 선언을 반복하지 않아도 된다. `*`는 명시도가 0이라, 공통 스타일을 깔아 두고 이름을 지정한 규칙으로 덮어쓸 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": "::highlight(*) {\n  text-decoration: underline;\n}\n::highlight(search) {\n  background-color: yellow;\n}",
+  "guideKo": "미지원 브라우저에서는 `::highlight(*)` 규칙만 무시된다. 꼭 필요한 스타일은 하이라이트 이름별 규칙에도 적어 둔다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "css",
+    "decl": "selector(::highlight(*))"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5174965228929024",
+    "https://drafts.csswg.org/css-pseudo-4/#selectordef-highlight-highlight-name-selector"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

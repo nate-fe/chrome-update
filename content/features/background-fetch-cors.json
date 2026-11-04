@@ -4,7 +4,7 @@
   "title": "Background Fetch CORS 적용",
   "category": "deprecation",
   "impact": "changed",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 157,
   "tags": [
     "silent"

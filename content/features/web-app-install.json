@@ -1,0 +1,46 @@
+{
+  "slug": "web-app-install",
+  "chromestatusId": 5183481574850560,
+  "title": "웹 앱 설치 `navigator.install()` · `<install>`",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "매니페스트 URL로 웹 앱 설치를 요청하는 `navigator.install()`과 `<install>` 요소가 추가된다. 다른 출처의 웹 앱도 설치를 제안할 수 있다.",
+  "whyKo": "지금까지는 같은 출처의 앱만 `beforeinstallprompt` 이벤트로 설치를 유도할 수 있었다. 이제 다른 사이트의 웹 앱 설치를 바로 제안할 수 있고, `<install>` 요소는 JS 없이도 쓸 수 있다.",
+  "exampleLang": "js",
+  "exampleCode": "button.addEventListener('click', async () => {\n  await navigator.install({\n    manifest: 'https://music.example/app.webmanifest',\n  });\n});",
+  "guideKo": "Windows, macOS, Linux, ChromeOS에 먼저 나오고 Android는 나중에 지원된다. `'install' in navigator`로 확인한 뒤 쓴다. 엔터프라이즈 정책이나 `web-app-installation` 권한 정책으로 막힐 수 있다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "js",
+    "expr": "'install' in navigator"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5183481574850560",
+    "https://chromestatus.com/feature/5152834368700416",
+    "https://wicg.github.io/install-element"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

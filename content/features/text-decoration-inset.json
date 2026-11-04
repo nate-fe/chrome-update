@@ -4,7 +4,7 @@
   "title": "CSS `text-decoration-inset`",
   "category": "css",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 157,
   "tags": [],
   "history": [
@@ -34,6 +34,8 @@
     "decl": "text-decoration-inset: 10px"
   },
   "demo": {
+    "html": "<p><a href=\"#\">크롬 위클리 제157호</a></p>\n<p class=\"s\"><s>지난 버전의 꼼수</s></p>",
+    "css": "p { font: 700 32px/1.6 var(--demo-sans); margin: 8px 0; }\na, s {\n  color: var(--demo-fg);\n  text-decoration-thickness: 3px;\n  text-decoration-color: var(--demo-accent);\n  text-decoration-inset: var(--inset);\n  transition: text-decoration-inset .3s;\n}\na { text-decoration-line: underline; text-underline-offset: 6px; }\na:hover { text-decoration-inset: 0px; }\n.s { font-size: 22px; }",
     "hint": "값을 움직이면 밑줄 양 끝이 줄어들거나 늘어납니다. 링크에 마우스를 올리면 밑줄이 끝까지 펼쳐집니다.",
     "controls": [
       {
@@ -46,12 +48,14 @@
         "value": 12
       }
     ],
-    "html": "<p><a href=\"#\">크롬 위클리 제157호</a></p>\n<p class=\"s\"><s>지난 버전의 꼼수</s></p>",
-    "css": "p { font: 700 32px/1.6 var(--demo-sans); margin: 8px 0; }\na, s {\n  color: var(--demo-fg);\n  text-decoration-thickness: 3px;\n  text-decoration-color: var(--demo-accent);\n  text-decoration-inset: var(--inset);\n  transition: text-decoration-inset .3s;\n}\na { text-decoration-line: underline; text-underline-offset: 6px; }\na:hover { text-decoration-inset: 0px; }\n.s { font-size: 22px; }",
     "fallback": {
       "html": "<p><a href=\"#\">크롬 위클리 제157호</a></p>",
       "css": "p { font: 700 32px/1.6 var(--demo-sans); margin: 8px 0; }\na {\n  color: var(--demo-fg);\n  text-decoration: none;\n  background-image: linear-gradient(var(--demo-muted), var(--demo-muted));\n  background-size: calc(100% - var(--inset) * 2) 3px;\n  background-position: center bottom;\n  background-repeat: no-repeat;\n  padding-bottom: 4px;\n}"
     }
+  },
+  "preview": {
+    "html": "<a>크롬 위클리 제157호</a>",
+    "css": "a { font: 600 18px var(--sans); color: var(--fg); }"
   },
   "before": {
     "lang": "css",
@@ -69,9 +73,5 @@
   "review": {
     "by": null,
     "at": null
-  },
-  "preview": {
-    "html": "<a>크롬 위클리 제157호</a>",
-    "css": "a { font: 600 18px var(--sans); color: var(--fg); }"
   }
 }

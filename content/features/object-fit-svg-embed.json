@@ -1,0 +1,42 @@
+{
+  "slug": "object-fit-svg-embed",
+  "chromestatusId": 4886345347629056,
+  "title": "`<object>` · `<embed>` SVG에 `object-fit` 적용",
+  "category": "css",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`<object>`, `<embed>`로 넣은 SVG 문서에도 `object-fit`, `object-position`이 `<img>`처럼 적용된다.",
+  "whyKo": "지금까지 Chrome은 이 두 속성을 무시하고 SVG를 요소 크기에 맞게 늘렸다. 이제 `<img>`와 같은 방식으로 SVG의 크기와 위치를 정할 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": "object.logo {\n  width: 240px;\n  height: 120px;\n  object-fit: contain;\n  object-position: left center;\n}",
+  "guideKo": "`<object>`나 `<embed>`에 `object-fit`, `object-position`을 이미 적어 둔 페이지는 SVG의 크기와 위치가 달라질 수 있다. 해당 화면을 확인한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/4886345347629056",
+    "https://html.spec.whatwg.org/multipage/rendering.html#embedded-content-rendering-rules"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

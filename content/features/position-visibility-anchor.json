@@ -4,7 +4,7 @@
   "title": "`position-visibility: anchor-valid / anchor-visible`",
   "category": "css",
   "impact": "changed",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 157,
   "tags": [
     "nerf"

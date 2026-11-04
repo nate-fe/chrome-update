@@ -1,6 +1,6 @@
 {
   "milestone": 157,
-  "status": "beta",
+  "status": "stable",
   "stableDate": "2026-11-03",
   "headlineKo": "밑줄 위치와 모서리 모양을 한 줄로",
   "summaryKo": "`text-decoration-inset`, `corner` 단축 속성, HTML-in-canvas가 나온다. Background Fetch에 CORS 검사가 적용된다."

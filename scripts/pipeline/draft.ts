@@ -190,7 +190,8 @@ function toFeature(c: Candidate, d: CsDetail, draft: Draft, stable: number): Fea
 // ───────── 실행 ─────────
 
 const placeholder = (m: number, status: string) => ({
-  headlineKo: `Chrome ${m} ${status === 'beta' ? '베타 ' : ''}변경사항 정리 중`,
+  // 화면 제목이 "Chrome 158 — <headlineKo>" 형태라 버전 번호는 넣지 않는다
+  headlineKo: `${status === 'beta' ? '베타 ' : ''}변경사항 정리 중`,
   summaryKo: '새 기능을 ChromeStatus 기준으로 정리하고 있습니다.',
 });
 

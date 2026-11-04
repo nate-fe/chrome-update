@@ -1,0 +1,42 @@
+{
+  "slug": "svg-textpath-side",
+  "chromestatusId": 5422782593761280,
+  "title": "SVG `<textPath>`의 `side` 속성",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`<textPath>`의 `side` 속성으로 글자가 경로의 어느 쪽을 따라갈지 고른다.",
+  "whyKo": "`side=\"right\"`는 경로 방향을 뒤집은 것처럼 글자를 놓는다. 원 경로 하나로 안쪽과 바깥쪽에 다른 글자를 넣을 수 있다. 예전에는 경로 데이터를 복제하거나 직접 뒤집어야 했다.",
+  "exampleLang": "html",
+  "exampleCode": "<path id=\"ring\" fill=\"none\"\n  d=\"M20,100 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0\" />\n<text>\n  <textPath href=\"#ring\">기본 쪽 글자</textPath>\n  <textPath href=\"#ring\" side=\"right\">반대쪽 글자</textPath>\n</text>",
+  "guideKo": "미지원 브라우저에서는 `side`가 무시되고 두 글자가 같은 쪽에 겹친다. 반대쪽 글자는 뒤집은 경로를 따로 두는 기존 방식을 폴백으로 쓴다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5422782593761280",
+    "https://w3c.github.io/svgwg/svg2-draft/text.html#TextPathElementSideAttribute"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

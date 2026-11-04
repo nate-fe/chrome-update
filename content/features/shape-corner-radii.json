@@ -1,0 +1,49 @@
+{
+  "slug": "shape-corner-radii",
+  "chromestatusId": 5100672946143232,
+  "title": "`circle()` · `ellipse()`의 `closest-corner` · `farthest-corner`",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`circle()`, `ellipse()` 도형 함수의 반지름에 `closest-corner`, `farthest-corner`를 쓸 수 있다.",
+  "whyKo": "중심에서 가장 가까운(먼) 모서리까지의 거리를 반지름으로 쓴다. 상자 모서리에 맞는 원을 만들려고 반지름을 직접 계산하지 않아도 된다. `radial-gradient()`와 같은 키워드를 `clip-path`, `shape-outside`, `offset-path`에서 쓴다.",
+  "exampleLang": "css",
+  "exampleCode": ".spotlight {\n  clip-path: circle(closest-corner at 30% 40%);\n}",
+  "guideKo": "미지원 브라우저에서는 이 선언이 통째로 무시된다. `closest-side` 같은 기존 값으로 된 선언을 앞에 적어 폴백으로 둔다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "css",
+    "decl": "clip-path: circle(closest-corner)"
+  },
+  "demo": null,
+  "preview": {
+    "html": "<div class=\"spotlight\">spotlight</div>",
+    "css": ".spotlight { width: 220px; height: 100px; display: grid; place-items: center; background: var(--accent); color: #fff; font: 600 14px var(--mono); }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5100672946143232",
+    "https://drafts.csswg.org/css-shapes-1/#basic-shape-functions"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "slug": "media-pseudo-classes",
+  "chromestatusId": 5068277495758848,
+  "title": "미디어 상태 의사 클래스 `:playing` · `:paused` 등",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`<audio>`, `<video>`의 상태에 따라 `:playing`, `:paused`, `:seeking`, `:buffering`, `:stalled`, `:muted`, `:volume-locked`가 맞는다.",
+  "whyKo": "재생 중에는 큰 재생 버튼을 숨기는 식의 표시를 JS 이벤트 없이 CSS만으로 할 수 있다. 다만 모든 상태가 CSS로 드러나지는 않아, 사용자 정의 컨트롤 전체를 CSS만으로 만들 수는 없다.",
+  "exampleLang": "css",
+  "exampleCode": ".player:paused {\n  outline: 3px solid orange;\n}\n.player:playing + .play-btn {\n  display: none;\n}",
+  "guideKo": "미지원 브라우저에서는 규칙이 무시된다. `play`·`pause` 이벤트로 클래스를 바꾸는 기존 코드를 폴백으로 남긴다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "css",
+    "decl": "selector(:playing)"
+  },
+  "demo": null,
+  "preview": {
+    "html": "<video class=\"player\" muted></video><button class=\"play-btn\">▶ 재생</button>",
+    "css": ".player { width: 160px; height: 90px; margin: 4px; vertical-align: middle; background: var(--panel); border: 1px solid var(--line); }\n.play-btn { margin-left: 10px; font: 12px var(--mono); }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5068277495758848",
+    "https://html.spec.whatwg.org/multipage/semantics-other.html#pseudo-classes"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

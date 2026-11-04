@@ -1,0 +1,46 @@
+{
+  "slug": "flow-start-end",
+  "chromestatusId": 5069051687731200,
+  "title": "`flow-start` · `flow-end` 정렬 키워드",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 158,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "정렬 속성에 `flow-start`, `flow-end` 키워드가 추가된다. `flex-start`, `flex-end`의 별칭이다.",
+  "whyKo": "Grid Lanes처럼 배치 방향을 뒤집을 수 있는 레이아웃에서, 컨테이너의 시작이 아니라 콘텐츠가 놓이기 시작하는 쪽을 기준으로 정렬할 수 있다. 플렉스박스, 그리드, Grid Lanes에서 같은 키워드를 쓴다.",
+  "exampleLang": "css",
+  "exampleCode": ".toolbar {\n  display: flex;\n  flex-direction: row-reverse;\n  justify-content: flex-start;\n  justify-content: flow-start;\n}",
+  "guideKo": "미지원 브라우저를 위해 `flex-start`를 먼저 적고 `flow-start`를 뒤에 적는다. 두 값은 같은 뜻이다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "css",
+    "decl": "justify-content: flow-start"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5069051687731200",
+    "https://github.com/w3c/csswg-drafts/pull/14539"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

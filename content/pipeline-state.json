@@ -1,24 +1,34 @@
 {
   "ignored": {
+    "4860330806214656": "158 정리 때 제외: WebTransport keying material export — WebTransport 세부 옵션",
     "4882016087703552": "157 정리 때 제외: WebGPU: atomic-vec2u-min-max",
     "4895435813683200": "156 정리 때 제외: Compression dictionary transport Updates",
     "5068439115923456": "157 정리 때 제외: Disconnect WebSockets on BFCache entry",
     "5069584943153152": "157 정리 때 제외: Expose ProgressEvent in service workers",
     "5072259281715200": "155 정리 때 제외: Host and screenshot restrictions for chrome.debugger API",
     "5087964794322944": "157 정리 때 제외: Language Detector API on Android",
+    "5089961022980096": "158 정리 때 제외: WebTransport anticipated concurrent incoming streams — WebTransport 세부 옵션",
     "5091582546149376": "156 정리 때 제외: WebRTC Diagnostic Logging API",
+    "5094058497277952": "158 정리 때 제외: WebTransport reliability attributes — WebTransport 세부 옵션",
     "5099333963874304": "155 정리 때 제외: Digital Credentials API (issuance support)",
     "5107682460696576": "157 정리 때 제외: Capability Elements Icon-only mode",
+    "5109900936085504": "158 정리 때 제외: OfflineAudioContext incremental rendering — 긴 오디오를 렌더링하는 Web Audio 앱에만 해당하는 저수준 API",
+    "5109912169480192": "158 정리 때 제외: WebTransport receive stream — WebTransport 세부 옵션",
     "5122501071994880": "155 정리 때 제외: PredefinedColorSpace srgb-linear and display-p3-linear",
     "5136856479039488": "position-visibility-anchor와 같은 변경 (단수형 값 출시)",
     "5138797158334464": "157 정리 때 제외: Web Bluetooth: Make BluetoothRemoteGATTServer an EventTarget",
     "5152728072060928": "156 정리 때 제외: Local network access restrictions",
+    "5152834368700416": "158 정리 때 제외: HTML install element — web-app-install 항목(navigator.install())에 함께 정리",
     "5169798320357376": "157 정리 때 제외: Add javascriptURLs option to SanitizerConfig and Sanitizer",
+    "5172464636133376": "158 정리 때 제외: Support for WebHID — Android 17 이상 지원 추가. 데스크톱은 Chrome 89부터 지원",
+    "5180947573112832": "158 정리 때 제외: WebTransport congestion control — WebTransport 세부 옵션",
     "5194104408506368": "156 정리 때 제외: WebTransport headers and responseHeaders",
     "5198951632470016": "155 정리 때 제외: Algorithm Updates in WebCrypto",
     "5261280285949952": "157 정리 때 제외: Overscroll Areas",
     "5657801797009408": "157 정리 때 제외: Connection Allowlists - Embedded Enforcement",
     "5663304168112128": "156 정리 때 제외: WebGPU: WGSL Fragment Depth",
-    "6327898878377984": "156 정리 때 제외: CSS pseudo-class for navigation source element"
+    "6208452397498368": "158 정리 때 제외: Source Specific Multicast for Direct Sockets API — Isolated Web Apps(ChromeOS) 전용",
+    "6327898878377984": "156 정리 때 제외: CSS pseudo-class for navigation source element",
+    "6427766428925952": "158 정리 때 제외: WebTransport draining — WebTransport 세부 옵션"
   }
 }
