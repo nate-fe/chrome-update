@@ -1,0 +1,74 @@
+{
+  "slug": "text-overflow-string",
+  "chromestatusId": 6294595288825856,
+  "title": "`text-overflow: <string>`",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "텍스트가 잘릴 때 `…` 대신 원하는 문자열을 표시한다.",
+  "whyKo": "\"⋯ 더보기\"처럼 잘림 표시를 바꾸려고 JS로 글자 수를 재던 코드를 CSS 한 줄로 바꿀 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": ".title {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: \" ⋯ 더보기\";\n}",
+  "guideKo": "미지원 브라우저는 `text-overflow` 선언 전체를 무시하므로, 앞에 `text-overflow: ellipsis;`를 한 줄 더 적어 폴백을 둔다.",
+  "support": {
+    "firefox": "9",
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "text-overflow: \"~\""
+  },
+  "demo": {
+    "html": "<div class=\"t\">Chrome 157에서 text-decoration-inset과 corner 단축 속성이 출시됩니다</div>",
+    "css": ".t {\n  width: var(--w);\n  padding: 10px 12px;\n  border: 1px solid var(--demo-border);\n  font: 15px/1.4 var(--demo-sans);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: \" ⋯ 더보기\";\n}",
+    "hint": "상자 너비를 줄여 보세요. 잘린 자리에 원하는 문자열이 붙습니다.",
+    "controls": [
+      {
+        "var": "--w",
+        "label": "너비",
+        "min": 120,
+        "max": 520,
+        "step": 1,
+        "unit": "px",
+        "value": 260
+      }
+    ],
+    "fallback": {
+      "html": "<div class=\"t\">Chrome 157에서 text-decoration-inset과 corner 단축 속성이 출시됩니다</div>",
+      "css": ".t {\n  width: var(--w);\n  padding: 10px 12px;\n  border: 1px solid var(--demo-border);\n  font: 15px/1.4 var(--demo-sans);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}"
+    }
+  },
+  "preview": {
+    "html": "<div class=\"title\">Chrome 157에서 text-decoration-inset과 corner 단축 속성이 출시됩니다</div>",
+    "css": ".title { width: 240px; padding: 6px 10px; border: 1px solid var(--line); }"
+  },
+  "before": {
+    "lang": "js",
+    "code": "function truncate(el, suffix) {\n  const full = (el.dataset.full ??= el.textContent);\n  el.textContent = full;\n  let n = full.length;\n  while (el.scrollWidth > el.clientWidth && n > 0) {\n    el.textContent = full.slice(0, --n) + suffix;\n  }\n}\ntruncate(title, ' ⋯ 더보기');\naddEventListener('resize', () => truncate(title, ' ⋯ 더보기'));"
+  },
+  "after": {
+    "lang": "css",
+    "code": ".title {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: \" ⋯ 더보기\";\n}"
+  },
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/6294595288825856",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157",
+    "https://developer.mozilla.org/ko/search?q=text-overflow"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

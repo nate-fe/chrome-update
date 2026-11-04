@@ -1,0 +1,64 @@
+{
+  "slug": "position-visibility-anchor",
+  "chromestatusId": 5136123851571200,
+  "title": "`position-visibility: anchor-valid / anchor-visible`",
+  "category": "css",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [
+    "nerf"
+  ],
+  "history": [
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "단수형 이름 출시, 복수형은 deprecated 별칭으로 유지"
+    }
+  ],
+  "summaryKo": "앵커 상태에 따라 앵커 위치 지정 요소를 보이거나 숨긴다. 기존 복수형 이름은 deprecated 별칭으로 남는다.",
+  "whyKo": "툴팁이 가리키는 앵커가 스크롤로 사라지면 툴팁도 함께 숨길 수 있다. 기존 `anchors-visible` 코드는 당장 깨지지 않지만 이름을 바꿔 두는 것이 좋다.",
+  "exampleLang": "css",
+  "exampleCode": ".tooltip {\n  position-anchor: --btn;\n  position-area: top;\n  position-visibility: anchor-visible;\n}",
+  "guideKo": "코드에서 `anchors-visible`, `anchors-valid`를 찾아 단수형으로 바꾼다. 별칭이 남아 있는 동안은 동작이 같다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "position-visibility: anchor-visible"
+  },
+  "demo": {
+    "html": "<div class=\"sc\">\n  <div class=\"pad\"></div>\n  <button class=\"a\">앵커</button>\n  <div class=\"pad\"></div>\n</div>\n<div class=\"tip\">툴팁이에요</div>",
+    "css": ".sc { height: 150px; width: 260px; overflow: auto; border: 1px solid var(--demo-border); margin-top: 48px; }\n.pad { height: 140px; }\n.a { anchor-name: --btn; margin-left: 90px; font: 13px var(--demo-mono); }\n.tip {\n  position: absolute;\n  position-anchor: --btn;\n  position-area: top;\n  position-visibility: anchor-visible;\n  margin-bottom: 6px;\n  padding: 4px 8px;\n  background: var(--demo-accent); color: #0b1020;\n  font: 12px var(--demo-sans);\n}",
+    "hint": "회색 상자를 스크롤해 앵커 버튼을 밖으로 내보내 보세요. 툴팁도 함께 사라집니다.",
+    "controls": []
+  },
+  "preview": {
+    "html": "<div class=\"wrap\"><button class=\"btn\">앵커 버튼</button><div class=\"tooltip\">툴팁</div></div>",
+    "css": ".wrap { position: relative; padding-top: 34px; } .btn { anchor-name: --btn; margin-left: 40px; font: 12px var(--mono); } .tooltip { position: absolute; margin-bottom: 4px; padding: 2px 8px; border-radius: 4px; background: var(--accent); color: #fff; font-size: 12px; white-space: nowrap; }"
+  },
+  "before": {
+    "lang": "css",
+    "code": ".tooltip {\n  position-anchor: --btn;\n  position-area: top;\n  position-visibility: anchors-visible;\n}"
+  },
+  "after": {
+    "lang": "css",
+    "code": ".tooltip {\n  position-anchor: --btn;\n  position-area: top;\n  position-visibility: anchor-visible;\n}"
+  },
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5136123851571200",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157",
+    "https://developer.mozilla.org/ko/search?q=position-visibility"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

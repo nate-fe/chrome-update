@@ -1,0 +1,73 @@
+{
+  "slug": "margin-trim",
+  "chromestatusId": 5197863732772864,
+  "title": "CSS `margin-trim`",
+  "category": "css",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "컨테이너가 첫 자식과 마지막 자식의 바깥 여백을 잘라낸다.",
+  "whyKo": "`:first-child { margin-top: 0 }` 같은 보정 규칙을 컴포넌트마다 반복하지 않아도 된다.",
+  "exampleLang": "css",
+  "exampleCode": ".card {\n  margin-trim: block;\n}",
+  "guideKo": "미지원 브라우저를 위해 기존 `:first-child`/`:last-child` 보정을 `@supports not (margin-trim: block)` 안으로 옮긴다.",
+  "support": {
+    "firefox": null,
+    "safari": "16.4"
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "margin-trim: block"
+  },
+  "demo": {
+    "html": "<div class=\"card\"><h3>제157호</h3><p>본문 첫 문단</p><p>마지막 문단</p></div>",
+    "css": ".card { margin-trim: block; padding: 16px; max-width: 320px; border: 1px dashed var(--demo-accent); font: 14px var(--demo-sans); }\n.card > * { margin-block: var(--m); background: color-mix(in srgb, var(--demo-accent) 18%, transparent); }",
+    "hint": "자식 여백을 키워 보세요. 카드 위아래 안쪽 간격은 그대로입니다.",
+    "controls": [
+      {
+        "var": "--m",
+        "label": "자식 margin",
+        "min": 0,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "value": 24
+      }
+    ],
+    "fallback": {
+      "html": "<div class=\"card\"><h3>제157호</h3><p>본문 첫 문단</p><p>마지막 문단</p></div>",
+      "css": ".card { padding: 16px; max-width: 320px; border: 1px dashed var(--demo-muted); font: 14px var(--demo-sans); }\n.card > * { margin-block: var(--m); background: color-mix(in srgb, var(--demo-muted) 18%, transparent); }"
+    }
+  },
+  "preview": {
+    "html": "<div class=\"card\"><h4>제목</h4><p>마지막 문단</p></div>",
+    "css": ".card { width: 220px; padding: 10px; border: 1px dashed var(--accent); } .card > * { margin: 16px 0; background: color-mix(in srgb, var(--accent) 18%, transparent); } h4 { font-size: 14px; }"
+  },
+  "before": {
+    "lang": "css",
+    "code": ".card > :first-child {\n  margin-top: 0;\n}\n.card > :last-child {\n  margin-bottom: 0;\n}"
+  },
+  "after": {
+    "lang": "css",
+    "code": ".card {\n  margin-trim: block;\n}"
+  },
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/5197863732772864",
+    "https://chromestatus.com/release-notes/155",
+    "https://developer.mozilla.org/ko/search?q=margin-trim"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

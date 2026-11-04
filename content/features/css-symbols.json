@@ -1,0 +1,73 @@
+{
+  "slug": "css-symbols",
+  "chromestatusId": 5146996093616128,
+  "title": "CSS `symbols()`",
+  "category": "css",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "`@counter-style`을 따로 만들지 않고 `symbols()`로 목록 기호를 바로 정의한다.",
+  "whyKo": "한 번만 쓰는 목록 기호를 위해 이름 붙은 규칙을 만들 필요가 없다.",
+  "exampleLang": "css",
+  "exampleCode": "ol {\n  list-style: symbols(cyclic \"◆\" \"◇\");\n}",
+  "guideKo": "여러 곳에서 재사용하는 기호라면 기존처럼 `@counter-style`이 더 낫다. 미지원 브라우저는 기본 숫자 목록으로 보인다.",
+  "support": {
+    "firefox": "35",
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "list-style-type: symbols(cyclic \"*\")"
+  },
+  "demo": {
+    "html": "<ol><li>margin-trim</li><li>symbols()</li><li>텍스트 모듈</li><li>JPEG XL</li></ol>",
+    "css": "ol { list-style: symbols(cyclic \"◆\" \"◇\"); font: 15px var(--demo-sans); }\nli { margin-block: var(--gap); padding-left: 6px; }\nli::marker { color: var(--demo-accent); }",
+    "hint": "목록 기호가 ◆ ◇ 순서로 반복됩니다.",
+    "controls": [
+      {
+        "var": "--gap",
+        "label": "줄 간격",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "value": 4
+      }
+    ],
+    "fallback": {
+      "html": "<ol><li>margin-trim</li><li>symbols()</li><li>텍스트 모듈</li><li>JPEG XL</li></ol>",
+      "css": "@counter-style diamonds { system: cyclic; symbols: \"◆\" \"◇\"; suffix: \" \"; }\nol { list-style: diamonds; font: 15px var(--demo-sans); }\nli { margin-block: var(--gap); padding-left: 6px; }\nli::marker { color: var(--demo-muted); }"
+    }
+  },
+  "preview": {
+    "html": "<ol><li>첫째 항목</li><li>둘째 항목</li><li>셋째 항목</li></ol>",
+    "css": "ol { margin: 0; padding-left: 26px; } li { padding-left: 4px; } li::marker { color: var(--accent); }"
+  },
+  "before": {
+    "lang": "css",
+    "code": "@counter-style diamonds {\n  system: cyclic;\n  symbols: \"◆\" \"◇\";\n  suffix: \" \";\n}\nol {\n  list-style: diamonds;\n}"
+  },
+  "after": {
+    "lang": "css",
+    "code": "ol {\n  list-style: symbols(cyclic \"◆\" \"◇\");\n}"
+  },
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/5146996093616128",
+    "https://chromestatus.com/release-notes/155",
+    "https://developer.mozilla.org/ko/search?q=symbols()"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

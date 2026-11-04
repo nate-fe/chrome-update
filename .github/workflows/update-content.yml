@@ -1,0 +1,113 @@
+# 매일 새 Chrome 버전·기능을 확인해 콘텐츠 PR을 만든다 (기획서 4장 자동화 파이프라인)
+#  1. 감지 → 4. Claude 초안 → 스키마 검사·빌드 → 5. 실제 Chrome 검사 → PR
+#  - 상태·날짜만 바뀐 PR은 바로 병합하고 배포한다.
+#  - 그 밖의 PR은 사람이 검수·승인해야 배포된다.
+name: 콘텐츠 자동 업데이트
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 매일 09:00 (한국 시간)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: update-content
+  cancel-in-progress: false
+
+env:
+  BRANCH: content/auto-update
+
+jobs:
+  # 검수 대기 중인 PR이 있으면 그 PR을 덮어쓰지 않도록 오늘은 쉰다
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      pending: ${{ steps.pr.outputs.pending }}
+    steps:
+      - id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --state open --json number --jq 'length')
+          echo "pending=$([ "$n" -gt 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          [ "$n" -gt 0 ] && echo "::notice::검수 대기 중인 콘텐츠 PR이 있어 오늘은 건너뜁니다."
+          true
+
+  update:
+    needs: check
+    if: needs.check.outputs.pending != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: 1. 감지 (Chromium Dash · ChromeStatus)
+        run: node scripts/pipeline/detect.ts
+
+      - name: 4. 한국어 초안 (Claude API)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/pipeline/draft.ts
+
+      - name: 스키마 검사 · 빌드
+        run: npm run typecheck && npm run build
+
+      - name: Chrome Stable · Beta 설치
+        run: npx playwright install --with-deps chrome chrome-beta
+
+      - name: 5. 실제 Chrome 검사
+        run: node scripts/pipeline/verify.ts --fix
+
+      - name: 검사 결과 반영 후 다시 빌드
+        run: npm run build
+
+      - name: PR 본문 작성
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          node scripts/pipeline/report.ts
+          cat pipeline-out/pr-body.md >> "$GITHUB_STEP_SUMMARY"
+
+      - id: meta
+        run: |
+          echo "status_only=$(jq -r .statusOnly pipeline-out/meta.json)" >> "$GITHUB_OUTPUT"
+          echo "date=$(TZ=Asia/Seoul date +%F)" >> "$GITHUB_OUTPUT"
+
+      - name: 미리보기 스크린샷 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-screens
+          path: pipeline-out/screens
+          if-no-files-found: ignore
+
+      - id: cpr
+        name: PR 만들기
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ${{ env.BRANCH }}
+          delete-branch: true
+          add-paths: content/**
+          commit-message: '콘텐츠 자동 업데이트 (${{ steps.meta.outputs.date }})'
+          title: '콘텐츠 자동 업데이트 (${{ steps.meta.outputs.date }})'
+          body-path: pipeline-out/pr-body.md
+          labels: ${{ steps.meta.outputs.status_only == 'true' && 'content,status-only' || 'content,needs-review' }}
+
+      # GITHUB_TOKEN으로 병합하면 push 이벤트가 다른 워크플로를 깨우지 않으므로 배포를 직접 실행한다
+      - name: 상태만 바뀐 PR은 바로 병합하고 배포
+        if: steps.meta.outputs.status_only == 'true' && steps.cpr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --squash --delete-branch
+          gh workflow run deploy.yml --ref "${{ github.event.repository.default_branch }}"

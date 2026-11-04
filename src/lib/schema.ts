@@ -1,0 +1,86 @@
+import { z } from 'zod';
+
+export const CategorySchema = z.enum(['css', 'js', 'deprecation']);
+export const StatusSchema = z.enum(['shipped', 'beta', 'postponed', 'origin-trial', 'deprecated', 'removed']);
+export const ImpactSchema = z.enum(['new', 'changed', 'removed']);
+export const LangSchema = z.enum(['css', 'js', 'html']);
+export const TagSchema = z.enum(['buff', 'nerf', 'deleted', 'silent']);
+
+const CodeSchema = z.object({ lang: LangSchema, code: z.string().min(1) });
+
+/** 지원 감지 식 (F12). css = CSS.supports(decl), media = matchMedia, js = 식 평가(Promise 가능) */
+export const FeatureTestSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('css'), decl: z.string() }),
+  z.object({ kind: z.literal('media'), query: z.string() }),
+  z.object({ kind: z.literal('js'), expr: z.string() }),
+]);
+
+const ControlSchema = z.object({
+  var: z.string().startsWith('--'),
+  label: z.string(),
+  min: z.number(),
+  max: z.number(),
+  step: z.number(),
+  unit: z.string(),
+  value: z.number(),
+});
+
+const DemoSourceSchema = z.object({
+  html: z.string(),
+  css: z.string(),
+  js: z.string().optional(),
+});
+
+const DemoSchema = DemoSourceSchema.extend({
+  hint: z.string().optional(),
+  controls: z.array(ControlSchema),
+  fallback: DemoSourceSchema.optional(),
+});
+
+export const FeatureSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/),
+  chromestatusId: z.number().nullable(),
+  title: z.string(),
+  category: CategorySchema,
+  impact: ImpactSchema,
+  status: StatusSchema,
+  milestone: z.number().int(),
+  tags: z.array(TagSchema),
+  history: z.array(
+    z.object({ milestone: z.number().int(), channel: z.enum(['beta', 'stable', 'mention']), note: z.string() }),
+  ),
+  summaryKo: z.string(),
+  whyKo: z.string(),
+  exampleLang: LangSchema,
+  exampleCode: z.string(),
+  guideKo: z.string().nullable(),
+  support: z.object({ firefox: z.string().nullable(), safari: z.string().nullable() }),
+  baseline: z.enum(['widely', 'newly', 'limited']).nullable(),
+  featureTest: FeatureTestSchema.nullable(),
+  demo: DemoSchema.nullable(),
+  /** 카드용 미니 미리보기: exampleCode를 그대로 적용할 HTML과 바탕 스타일 */
+  preview: z.object({ html: z.string(), css: z.string().default('') }).optional(),
+  before: CodeSchema.nullable(),
+  after: CodeSchema.nullable(),
+  /** 근거가 부족해 '확인 필요'로 표시할 필드 이름 */
+  needsCheck: z.array(z.string()),
+  sources: z.array(z.url()).min(1),
+  review: z.object({ by: z.string().nullable(), at: z.string().nullable() }),
+});
+
+export const ReleaseSchema = z.object({
+  milestone: z.number().int(),
+  status: z.enum(['stable', 'beta']),
+  stableDate: z.iso.date(),
+  headlineKo: z.string(),
+  summaryKo: z.string(),
+});
+
+export type Feature = z.infer<typeof FeatureSchema>;
+export type Release = z.infer<typeof ReleaseSchema>;
+export type Category = z.infer<typeof CategorySchema>;
+export type Status = z.infer<typeof StatusSchema>;
+export type Impact = z.infer<typeof ImpactSchema>;
+export type Lang = z.infer<typeof LangSchema>;
+export type FeatureTest = z.infer<typeof FeatureTestSchema>;
+export type Demo = z.infer<typeof DemoSchema>;

@@ -1,0 +1,42 @@
+# 사람이 올린 PR 검사: 스키마·타입·빌드, 실제 Chrome으로 감지 식과 미리보기 확인
+# (자동 업데이트 PR은 만들 때 같은 검사를 이미 거친다)
+name: PR 검사
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: 타입 · 스키마 검사 · 빌드
+        run: npm run typecheck && npm run build
+
+      - name: Chrome Stable · Beta 설치
+        run: npx playwright install --with-deps chrome chrome-beta
+
+      - name: 실제 Chrome 검사
+        run: |
+          node scripts/pipeline/verify.ts
+          node scripts/pipeline/report.ts
+          cat pipeline-out/pr-body.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 미리보기 스크린샷 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-screens
+          path: pipeline-out/screens
+          if-no-files-found: ignore

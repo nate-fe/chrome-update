@@ -1,0 +1,43 @@
+{
+  "slug": "indexeddb-sqlite",
+  "chromestatusId": 5161589557821440,
+  "title": "IndexedDB SQLite 백엔드",
+  "category": "js",
+  "impact": "changed",
+  "status": "shipped",
+  "milestone": 156,
+  "tags": [
+    "silent"
+  ],
+  "history": [
+    {
+      "milestone": 156,
+      "channel": "stable",
+      "note": "저장소 구현 교체"
+    }
+  ],
+  "summaryKo": "IndexedDB의 내부 저장소가 SQLite 기반으로 바뀐다. API는 그대로다.",
+  "whyKo": "코드를 바꿀 필요는 없다. 다만 대량 읽기·쓰기 성능이나 저장 용량 측정값이 달라질 수 있으니 IndexedDB를 많이 쓰는 화면은 한 번 점검한다.",
+  "exampleLang": "js",
+  "exampleCode": "// 코드 변경 없음: 기존 API가 그대로 동작한다\nconst req = indexedDB.open('app', 1);\nreq.onsuccess = () => console.log('opened', req.result.name);",
+  "guideKo": "156 전후로 대량 쓰기·읽기 시간을 비교하고, `navigator.storage.estimate()` 값 변화를 확인한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/5161589557821440",
+    "https://chromestatus.com/release-notes/156",
+    "https://chromestatuslite.com/?version=156"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

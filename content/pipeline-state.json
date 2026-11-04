@@ -1,0 +1,24 @@
+{
+  "ignored": {
+    "4882016087703552": "157 정리 때 제외: WebGPU: atomic-vec2u-min-max",
+    "4895435813683200": "156 정리 때 제외: Compression dictionary transport Updates",
+    "5068439115923456": "157 정리 때 제외: Disconnect WebSockets on BFCache entry",
+    "5069584943153152": "157 정리 때 제외: Expose ProgressEvent in service workers",
+    "5072259281715200": "155 정리 때 제외: Host and screenshot restrictions for chrome.debugger API",
+    "5087964794322944": "157 정리 때 제외: Language Detector API on Android",
+    "5091582546149376": "156 정리 때 제외: WebRTC Diagnostic Logging API",
+    "5099333963874304": "155 정리 때 제외: Digital Credentials API (issuance support)",
+    "5107682460696576": "157 정리 때 제외: Capability Elements Icon-only mode",
+    "5122501071994880": "155 정리 때 제외: PredefinedColorSpace srgb-linear and display-p3-linear",
+    "5136856479039488": "position-visibility-anchor와 같은 변경 (단수형 값 출시)",
+    "5138797158334464": "157 정리 때 제외: Web Bluetooth: Make BluetoothRemoteGATTServer an EventTarget",
+    "5152728072060928": "156 정리 때 제외: Local network access restrictions",
+    "5169798320357376": "157 정리 때 제외: Add javascriptURLs option to SanitizerConfig and Sanitizer",
+    "5194104408506368": "156 정리 때 제외: WebTransport headers and responseHeaders",
+    "5198951632470016": "155 정리 때 제외: Algorithm Updates in WebCrypto",
+    "5261280285949952": "157 정리 때 제외: Overscroll Areas",
+    "5657801797009408": "157 정리 때 제외: Connection Allowlists - Embedded Enforcement",
+    "5663304168112128": "156 정리 때 제외: WebGPU: WGSL Fragment Depth",
+    "6327898878377984": "156 정리 때 제외: CSS pseudo-class for navigation source element"
+  }
+}

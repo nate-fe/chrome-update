@@ -1,0 +1,46 @@
+{
+  "slug": "hidden-iframe-media-policy",
+  "chromestatusId": 5082950457884672,
+  "title": "보이지 않는 iframe 미디어 정책",
+  "category": "js",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "숨겨진 iframe에서 소리 나는 미디어 재생을 막을 수 있는 권한 정책이 추가된다.",
+  "whyKo": "화면에 보이지 않는 광고·위젯 iframe이 몰래 소리를 내는 것을 막을 수 있다.",
+  "exampleLang": "html",
+  "exampleCode": "<iframe src=\"https://widget.example.com/player\"\n        allow=\"media-playback-while-not-visible 'none'\"></iframe>",
+  "guideKo": "서드파티 iframe을 숨긴 채로 두는 곳이 있다면 정책을 붙인다. 미지원 브라우저는 `allow` 값을 무시한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "js",
+    "expr": "(document.featurePolicy?.features?.() ?? []).includes('media-playback-while-not-visible')"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "exampleCode",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5082950457884672",
+    "https://chromestatus.com/release-notes/155"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

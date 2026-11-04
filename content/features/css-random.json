@@ -1,0 +1,78 @@
+{
+  "slug": "css-random",
+  "chromestatusId": 5324559251275776,
+  "title": "CSS `random()`",
+  "category": "css",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 156,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 156,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "`random()`으로 정한 범위 안에서 난수 값을 만든다.",
+  "whyKo": "컨페티, 별 배경, 살짝 기울어진 카드처럼 요소마다 값이 달라야 하는 효과를 JS 없이 만들 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": ".confetti {\n  translate: random(-100px, 100px) 0;\n  rotate: random(0deg, 360deg);\n}",
+  "guideKo": "미지원 브라우저에서는 선언이 무시되므로 고정값을 먼저 적어 둔다. 꼭 필요한 효과라면 JS로 인라인 스타일을 넣는 기존 코드를 폴백으로 남긴다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "width: random(10px, 100px)"
+  },
+  "demo": {
+    "html": "<button id=\"go\">🎉 터뜨리기</button>\n<div id=\"stage\"></div>",
+    "css": "#stage { position: relative; height: 180px; }\n.c {\n  position: absolute; left: 50%; top: 50%;\n  width: 10px; height: 16px; border-radius: 2px;\n  background: hsl(random(0, 360) 85% 60%);\n  translate: random(calc(var(--spread) * -1), var(--spread)) random(calc(var(--spread) * -0.6), calc(var(--spread) * 0.6));\n  rotate: random(0deg, 360deg);\n}\nbutton { font: 14px var(--demo-sans); padding: 6px 12px; }",
+    "js": "function go() {\n  const s = document.getElementById('stage');\n  s.replaceChildren(...Array.from({ length: 40 }, () => {\n    const d = document.createElement('i');\n    d.className = 'c';\n    return d;\n  }));\n}\ndocument.getElementById('go').onclick = go;\ngo();",
+    "hint": "버튼을 누를 때마다 요소를 다시 만들어 컨페티가 다르게 튑니다.",
+    "controls": [
+      {
+        "var": "--spread",
+        "label": "퍼짐",
+        "min": 20,
+        "max": 160,
+        "step": 1,
+        "unit": "px",
+        "value": 110
+      }
+    ],
+    "fallback": {
+      "html": "<button id=\"go\">🎉 터뜨리기 (JS)</button>\n<div id=\"stage\"></div>",
+      "css": "#stage { position: relative; height: 180px; }\n.c { position: absolute; left: 50%; top: 50%; width: 10px; height: 16px; border-radius: 2px; }\nbutton { font: 14px var(--demo-sans); padding: 6px 12px; }",
+      "js": "function go() {\n  const s = document.getElementById('stage');\n  const sp = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--spread')) || 110;\n  const r = (a, b) => a + Math.random() * (b - a);\n  s.replaceChildren(...Array.from({ length: 40 }, () => {\n    const d = document.createElement('i');\n    d.className = 'c';\n    d.style.background = `hsl(${r(0, 360)} 85% 60%)`;\n    d.style.translate = `${r(-sp, sp)}px ${r(-sp * 0.6, sp * 0.6)}px`;\n    d.style.rotate = `${r(0, 360)}deg`;\n    return d;\n  }));\n}\ndocument.getElementById('go').onclick = go;\ngo();"
+    }
+  },
+  "preview": {
+    "html": "<div class=\"stage\"><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i><i class=\"confetti\"></i></div>",
+    "css": ".stage { position: relative; width: 240px; height: 72px; }\n.confetti { position: absolute; left: 50%; top: 40%; width: 8px; height: 14px; border-radius: 2px; background: var(--accent); }\n.confetti:nth-child(3n) { background: #f5a524; }\n.confetti:nth-child(3n+1) { background: #3fb950; }"
+  },
+  "before": {
+    "lang": "js",
+    "code": "document.querySelectorAll('.confetti').forEach((el) => {\n  el.style.translate = `${Math.random() * 200 - 100}px 0`;\n  el.style.rotate = `${Math.random() * 360}deg`;\n});"
+  },
+  "after": {
+    "lang": "css",
+    "code": ".confetti {\n  translate: random(-100px, 100px) 0;\n  rotate: random(0deg, 360deg);\n}"
+  },
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5324559251275776",
+    "https://chromestatus.com/release-notes/156",
+    "https://chromestatuslite.com/?version=156",
+    "https://developer.mozilla.org/ko/search?q=random()"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

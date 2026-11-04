@@ -1,0 +1,53 @@
+{
+  "slug": "html-insertion-streaming",
+  "chromestatusId": 5054329641893888,
+  "title": "HTML 삽입·스트리밍 메서드",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "위치를 지정해 마크업을 삽입하는 메서드와, 스트림으로 받은 HTML을 받는 즉시 삽입하는 메서드가 추가된다.",
+  "whyKo": "서버가 조각조각 보내는 HTML을 다 모을 때까지 기다리지 않고 바로 화면에 붙일 수 있다. `insertAdjacentHTML`의 위치 문자열보다 의도가 잘 드러난다.",
+  "exampleLang": "js",
+  "exampleCode": "// 메서드 이름은 ChromeStatus 원문으로 확인 필요\nconst res = await fetch('/fragments/comments');\nawait res.body\n  .pipeThrough(new TextDecoderStream())\n  .pipeTo(list.streamAppendHTMLUnsafe());",
+  "guideKo": "사용자 입력이 섞인 HTML은 Sanitizer를 거치는 안전한 변형을 쓴다. 미지원 브라우저에서는 `insertAdjacentHTML`로 대체한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "js",
+    "expr": "['appendHTML', 'appendHTMLUnsafe', 'streamAppendHTMLUnsafe'].some((m) => m in Element.prototype)"
+  },
+  "demo": null,
+  "before": {
+    "lang": "js",
+    "code": "const html = await (await fetch('/fragments/comments')).text();\nlist.insertAdjacentHTML('beforeend', html);"
+  },
+  "after": {
+    "lang": "js",
+    "code": "const res = await fetch('/fragments/comments');\nawait res.body\n  .pipeThrough(new TextDecoderStream())\n  .pipeTo(list.streamAppendHTMLUnsafe());"
+  },
+  "needsCheck": [
+    "exampleCode",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5054329641893888",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

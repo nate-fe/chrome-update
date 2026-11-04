@@ -1,0 +1,77 @@
+{
+  "slug": "text-decoration-inset",
+  "chromestatusId": 5178263526834176,
+  "title": "CSS `text-decoration-inset`",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 154,
+      "channel": "mention",
+      "note": "New in Chrome 154 글에 소개됨"
+    },
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "밑줄·윗줄·취소선의 시작과 끝 위치를 안쪽이나 바깥으로 조절한다.",
+  "whyKo": "밑줄 애니메이션을 그라디언트 배경 꼼수 없이 만들 수 있다. 진짜 text-decoration이라 줄바꿈과 색 상속도 자연스럽다.",
+  "exampleLang": "css",
+  "exampleCode": "a {\n  text-decoration: underline;\n  text-decoration-inset: 10px;\n}",
+  "guideKo": "`@supports (text-decoration-inset: 0)`로 감싸고, 미지원 브라우저에서는 일반 밑줄을 그대로 둔다.",
+  "support": {
+    "firefox": "146",
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "text-decoration-inset: 10px"
+  },
+  "demo": {
+    "hint": "값을 움직이면 밑줄 양 끝이 줄어들거나 늘어납니다. 링크에 마우스를 올리면 밑줄이 끝까지 펼쳐집니다.",
+    "controls": [
+      {
+        "var": "--inset",
+        "label": "inset",
+        "min": -16,
+        "max": 60,
+        "step": 1,
+        "unit": "px",
+        "value": 12
+      }
+    ],
+    "html": "<p><a href=\"#\">크롬 위클리 제157호</a></p>\n<p class=\"s\"><s>지난 버전의 꼼수</s></p>",
+    "css": "p { font: 700 32px/1.6 var(--demo-sans); margin: 8px 0; }\na, s {\n  color: var(--demo-fg);\n  text-decoration-thickness: 3px;\n  text-decoration-color: var(--demo-accent);\n  text-decoration-inset: var(--inset);\n  transition: text-decoration-inset .3s;\n}\na { text-decoration-line: underline; text-underline-offset: 6px; }\na:hover { text-decoration-inset: 0px; }\n.s { font-size: 22px; }",
+    "fallback": {
+      "html": "<p><a href=\"#\">크롬 위클리 제157호</a></p>",
+      "css": "p { font: 700 32px/1.6 var(--demo-sans); margin: 8px 0; }\na {\n  color: var(--demo-fg);\n  text-decoration: none;\n  background-image: linear-gradient(var(--demo-muted), var(--demo-muted));\n  background-size: calc(100% - var(--inset) * 2) 3px;\n  background-position: center bottom;\n  background-repeat: no-repeat;\n  padding-bottom: 4px;\n}"
+    }
+  },
+  "before": {
+    "lang": "css",
+    "code": "a {\n  text-decoration: none;\n  background-image: linear-gradient(currentColor, currentColor);\n  background-size: calc(100% - 20px) 1px;\n  background-position: center bottom;\n  background-repeat: no-repeat;\n  padding-bottom: 2px;\n}"
+  },
+  "after": {
+    "lang": "css",
+    "code": "a {\n  text-decoration: underline;\n  text-decoration-inset: 10px;\n}"
+  },
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/5178263526834176",
+    "https://developer.mozilla.org/ko/search?q=text-decoration-inset"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  },
+  "preview": {
+    "html": "<a>크롬 위클리 제157호</a>",
+    "css": "a { font: 600 18px var(--sans); color: var(--fg); }"
+  }
+}

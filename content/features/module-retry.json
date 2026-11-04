@@ -1,0 +1,54 @@
+{
+  "slug": "module-retry",
+  "chromestatusId": 5214647044145152,
+  "title": "실패한 모듈 재시도",
+  "category": "js",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 156,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "beta",
+      "note": "155 베타 공지에 소개됨"
+    },
+    {
+      "milestone": 156,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 156에서 기본 활성화"
+    }
+  ],
+  "summaryKo": "네트워크 오류로 실패한 `import()`를 다시 호출하면 실제로 다시 요청한다.",
+  "whyKo": "예전에는 실패 결과가 모듈 맵에 남아 같은 URL로 다시 불러도 같은 오류가 났다. 그래서 `?retry=1` 같은 쿼리를 붙였고, 그 결과 모듈이 두 번 실행되기도 했다.",
+  "exampleLang": "js",
+  "exampleCode": "async function load(attempt = 0) {\n  try {\n    return await import('./chart.js');\n  } catch (e) {\n    if (attempt >= 2) throw e;\n    return load(attempt + 1);\n  }\n}",
+  "guideKo": "156 이상만 지원한다면 쿼리 꼼수를 지운다. 구버전을 지원해야 하면 브라우저 버전으로 분기한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": null,
+  "demo": null,
+  "before": {
+    "lang": "js",
+    "code": "async function load(attempt = 0) {\n  try {\n    return await import(`./chart.js?retry=${attempt}`);\n  } catch (e) {\n    if (attempt >= 2) throw e;\n    return load(attempt + 1);\n  }\n}"
+  },
+  "after": {
+    "lang": "js",
+    "code": "async function load(attempt = 0) {\n  try {\n    return await import('./chart.js');\n  } catch (e) {\n    if (attempt >= 2) throw e;\n    return load(attempt + 1);\n  }\n}"
+  },
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5214647044145152",
+    "https://chromestatus.com/release-notes/156",
+    "https://chromestatuslite.com/?version=156"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

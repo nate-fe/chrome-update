@@ -1,0 +1,43 @@
+{
+  "slug": "background-fetch-cors",
+  "chromestatusId": 6210300985606144,
+  "title": "Background Fetch CORS 적용",
+  "category": "deprecation",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [
+    "silent"
+  ],
+  "history": [
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "동작 변경 적용"
+    }
+  ],
+  "summaryKo": "Background Fetch로 보내는 교차 출처 요청에도 CORS 검사가 적용된다.",
+  "whyKo": "지금까지 CORS 헤더 없이 받아지던 다른 출처의 파일이 157부터 실패할 수 있다. 오프라인 다운로드 기능을 쓰는 서비스는 확인이 필요하다.",
+  "exampleLang": "js",
+  "exampleCode": "const reg = await navigator.serviceWorker.ready;\nawait reg.backgroundFetch.fetch('episode-12', [\n  'https://cdn.example.com/ep12.mp4', // 이제 CORS 응답 헤더가 필요\n], { title: '12화 다운로드' });",
+  "guideKo": "다른 출처에서 받는 파일이면 그 서버에 `Access-Control-Allow-Origin` 헤더를 추가한다. 서비스 워커의 `backgroundfetchfail` 이벤트로 실패를 기록해 영향 범위를 확인한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/6210300985606144",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "slug": "text-decoration-skip-spaces",
+  "chromestatusId": 4832783806627840,
+  "title": "CSS `text-decoration-skip-spaces`",
+  "category": "css",
+  "impact": "new",
+  "status": "postponed",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "mention",
+      "note": "ChromeStatus에 155 출시 예정으로 올라왔지만 상태는 아직 '제안됨'. Chrome 156에서도 기본 비활성 (2026-11-03 확인)"
+    }
+  ],
+  "summaryKo": "밑줄 같은 텍스트 장식이 앞뒤 공백이나 단어 사이 공백을 건너뛸지 정한다.",
+  "whyKo": "태그·코드 조각처럼 공백까지 밑줄을 이어 그리거나, 반대로 공백을 비워 두고 싶을 때 마크업을 쪼개지 않아도 된다.",
+  "exampleLang": "css",
+  "exampleCode": ".tag {\n  text-decoration: underline;\n  text-decoration-skip-spaces: none;\n}",
+  "guideKo": "아직 기본으로 켜지지 않아 Chrome 156에서도 적용되지 않는다. 지금은 기본값(앞뒤 공백 건너뜀)으로 보이므로, 필요하면 공백을 `&nbsp;`로 바꾸거나 요소를 나눠 처리한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "text-decoration-skip-spaces: all"
+  },
+  "demo": {
+    "hint": "같은 문장을 값만 바꿔 그렸습니다. 공백 위 밑줄을 비교해 보세요.",
+    "controls": [],
+    "html": "<p class=\"none\">none:  <u>  밑줄  사이  공백  </u></p>\n<p class=\"se\">start end:  <u>  밑줄  사이  공백  </u></p>\n<p class=\"all\">all:  <u>  밑줄  사이  공백  </u></p>",
+    "css": "p { font: 20px var(--demo-mono); white-space: pre; margin: 10px 0; }\nu { text-decoration-color: var(--demo-accent); text-decoration-thickness: 2px; }\n.none u { text-decoration-skip-spaces: none; }\n.se u { text-decoration-skip-spaces: start end; }\n.all u { text-decoration-skip-spaces: all; }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "milestone"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/4832783806627840",
+    "https://chromestatus.com/release-notes/155",
+    "https://developer.mozilla.org/ko/search?q=text-decoration-skip-spaces"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  },
+  "preview": {
+    "html": "<span class=\"tag\">  #CSS  새  기능  </span>",
+    "css": ".tag { white-space: pre; font: 15px var(--mono); }"
+  }
+}

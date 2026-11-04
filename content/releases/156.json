@@ -1,0 +1,7 @@
+{
+  "milestone": 156,
+  "status": "stable",
+  "stableDate": "2026-10-20",
+  "headlineKo": "난수는 CSS로, 실패한 import는 다시",
+  "summaryKo": "CSS `random()`이 나오고 실패한 `import()`를 재시도할 수 있게 됐다. Fenced frame은 no-op으로 바뀌었다."
+}

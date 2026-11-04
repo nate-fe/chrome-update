@@ -1,0 +1,54 @@
+{
+  "slug": "fenced-frame-noop",
+  "chromestatusId": 6366274495053824,
+  "title": "Fenced frame, `window.fence` no-op",
+  "category": "deprecation",
+  "impact": "removed",
+  "status": "removed",
+  "milestone": 156,
+  "tags": [
+    "deleted"
+  ],
+  "history": [
+    {
+      "milestone": 156,
+      "channel": "stable",
+      "note": "동작하지 않게(no-op) 바뀜"
+    },
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "요소 제거를 단계적으로 진행"
+    }
+  ],
+  "summaryKo": "`<fencedframe>`과 `window.fence`가 아무 동작도 하지 않게 바뀌었다. 157부터 요소 자체를 단계적으로 제거한다.",
+  "whyKo": "광고·Protected Audience 관련 코드가 `window.fence`를 바로 호출하면, 객체가 사라지는 시점에 오류가 난다.",
+  "exampleLang": "js",
+  "exampleCode": "if (window.fence) {\n  window.fence.reportEvent({ eventType: 'click', destination: ['buyer'] });\n}",
+  "guideKo": "광고 SDK를 최신 버전으로 올리고, `window.fence` 호출은 존재 여부를 확인한 뒤에 한다. `<fencedframe>`을 직접 쓰는 곳은 `<iframe>`으로 바꿀지 검토한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": {
+    "lang": "js",
+    "code": "window.fence.reportEvent({ eventType: 'click', destination: ['buyer'] });"
+  },
+  "after": {
+    "lang": "js",
+    "code": "if (window.fence) {\n  window.fence.reportEvent({ eventType: 'click', destination: ['buyer'] });\n}"
+  },
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/6366274495053824",
+    "https://chromestatus.com/release-notes/156",
+    "https://chromestatuslite.com/?version=156"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

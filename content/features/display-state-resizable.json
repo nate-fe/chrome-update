@@ -1,0 +1,57 @@
+{
+  "slug": "display-state-resizable",
+  "chromestatusId": 5201832664629248,
+  "title": "`display-state`, `resizable` 미디어 쿼리",
+  "category": "css",
+  "impact": "new",
+  "status": "postponed",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "mention",
+      "note": "Additional Windowing Controls의 일부. ChromeStatus에 155가 적혀 있지만 상태는 '개발자 체험(플래그 뒤)'. Chrome 156에서도 기본 비활성 (2026-11-03 확인)"
+    }
+  ],
+  "summaryKo": "창이 최소화·최대화·전체 화면 상태인지, 창 크기를 조절할 수 있는지 감지한다.",
+  "whyKo": "설치형 웹앱(PWA)에서 창 상태에 맞춰 툴바 간격이나 안내 문구를 바꿀 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": "@media (display-state: maximized) {\n  .toolbar { padding-inline: 32px; }\n}\n@media (resizable: false) {\n  .resize-hint { display: none; }\n}",
+  "guideKo": "아직 플래그 뒤에 있어 일반 Chrome에서는 동작하지 않는다. 미지원 브라우저에서는 미디어 쿼리 블록이 통째로 무시되므로, 기본 스타일만으로도 화면이 깨지지 않게 둔다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "media",
+    "query": "(display-state: normal)"
+  },
+  "demo": {
+    "hint": "현재 창 상태에 맞는 줄만 켜집니다.",
+    "controls": [],
+    "html": "<ul>\n  <li class=\"n\">display-state: normal</li>\n  <li class=\"mx\">display-state: maximized</li>\n  <li class=\"fs\">display-state: fullscreen</li>\n  <li class=\"rt\">resizable: true</li>\n  <li class=\"rf\">resizable: false</li>\n</ul>",
+    "css": "ul { font: 14px var(--demo-mono); list-style: none; padding: 0; }\nli { padding: 4px 8px; opacity: .35; }\nli::before { content: \"○ \"; }\n@media (display-state: normal) { .n { opacity: 1; color: var(--demo-accent); } .n::before { content: \"● \"; } }\n@media (display-state: maximized) { .mx { opacity: 1; color: var(--demo-accent); } .mx::before { content: \"● \"; } }\n@media (display-state: fullscreen) { .fs { opacity: 1; color: var(--demo-accent); } .fs::before { content: \"● \"; } }\n@media (resizable: true) { .rt { opacity: 1; color: var(--demo-accent); } .rt::before { content: \"● \"; } }\n@media (resizable: false) { .rf { opacity: 1; color: var(--demo-accent); } .rf::before { content: \"● \"; } }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "whyKo",
+    "featureTest",
+    "milestone"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5201832664629248",
+    "https://chromestatus.com/release-notes/155",
+    "https://developer.mozilla.org/ko/search?q=display-state"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  },
+  "preview": {
+    "html": "<div class=\"toolbar\">툴바 · 창 상태에 따라 여백이 바뀜</div><p class=\"resize-hint\">↘ 창 크기를 조절할 수 있습니다</p>",
+    "css": ".toolbar { padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); font: 12px var(--mono); } .resize-hint { margin: 6px 0 0; font-size: 12px; color: var(--fg-dim); }"
+  }
+}

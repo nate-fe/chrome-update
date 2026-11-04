@@ -1,0 +1,29 @@
+{
+  "deprecated": {
+    "ko": "deprecated",
+    "note": "번역하지 않는다"
+  },
+  "origin trial": {
+    "ko": "오리진 트라이얼",
+    "note": "\"미리 보기\" 라벨과 함께 쓴다"
+  },
+  "shorthand": {
+    "ko": "단축 속성"
+  },
+  "enabled by default": {
+    "ko": "기본 활성화"
+  },
+  "no-op": {
+    "ko": "no-op",
+    "note": "처음 나올 때 \"동작하지 않음\"을 괄호로 덧붙인다"
+  },
+  "stable": {
+    "ko": "stable"
+  },
+  "beta": {
+    "ko": "베타"
+  },
+  "milestone": {
+    "ko": "마일스톤"
+  }
+}

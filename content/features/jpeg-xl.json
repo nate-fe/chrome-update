@@ -1,0 +1,41 @@
+{
+  "slug": "jpeg-xl",
+  "chromestatusId": 5114042131808256,
+  "title": "JPEG XL 디코딩",
+  "category": "js",
+  "impact": "new",
+  "status": "shipped",
+  "milestone": 155,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "`<img>`와 CSS 배경 등에서 `image/jxl` 이미지를 표시한다.",
+  "whyKo": "같은 화질에서 JPEG보다 작은 파일을 쓸 수 있고, 기존 JPEG를 손실 없이 다시 압축할 수 있다.",
+  "exampleLang": "html",
+  "exampleCode": "<picture>\n  <source srcset=\"hero.jxl\" type=\"image/jxl\">\n  <img src=\"hero.jpg\" alt=\"메인 이미지\">\n</picture>",
+  "guideKo": "`<picture>`로 AVIF·JPEG 폴백을 둔다. CDN의 `Accept` 헤더 협상을 쓴다면 `image/jxl`을 추가한다.",
+  "support": {
+    "firefox": null,
+    "safari": "17"
+  },
+  "baseline": "limited",
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [],
+  "sources": [
+    "https://chromestatus.com/feature/5114042131808256",
+    "https://chromestatus.com/release-notes/155",
+    "https://developer.mozilla.org/ko/search?q=JPEG%20XL"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "slug": "html-in-canvas",
+  "chromestatusId": 5172548013916160,
+  "title": "HTML-in-canvas",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 기본 활성화"
+    }
+  ],
+  "summaryKo": "`<canvas>` 안의 HTML 요소를 캔버스에 그리고, 그려진 결과를 실제 DOM과 동기화한다.",
+  "whyKo": "캔버스·WebGL 화면 안에서도 텍스트 레이아웃, 접근성, 입력 처리를 HTML에 맡길 수 있다. 차트 라벨이나 3D 장면 속 UI를 직접 그리지 않아도 된다.",
+  "exampleLang": "html",
+  "exampleCode": "<canvas id=\"c\" layoutsubtree>\n  <div id=\"label\">안녕하세요</div>\n</canvas>\n<script>\n  const ctx = c.getContext(\"2d\");\n  ctx.drawElementImage(label, 20, 20);\n</script>",
+  "guideKo": "메서드 존재 여부로 기능을 감지하고, 미지원이면 캔버스 위에 DOM을 겹쳐 놓는 기존 방식을 유지한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "js",
+    "expr": "typeof CanvasRenderingContext2D !== 'undefined' && ('drawElementImage' in CanvasRenderingContext2D.prototype || 'drawElement' in CanvasRenderingContext2D.prototype)"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "exampleCode",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5172548013916160",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157",
+    "https://developer.chrome.com/blog/chrome-157-beta"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

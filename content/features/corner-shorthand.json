@@ -1,0 +1,82 @@
+{
+  "slug": "corner-shorthand",
+  "chromestatusId": 5152215540039680,
+  "title": "`corner` 단축 속성",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 157,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 155,
+      "channel": "beta",
+      "note": "155 베타 공지에 소개됨"
+    },
+    {
+      "milestone": 157,
+      "channel": "stable",
+      "note": "ChromeStatus 기준 157에서 기본 활성화"
+    }
+  ],
+  "summaryKo": "모서리별 `border-radius`와 `corner-shape`를 한 속성으로 지정한다.",
+  "whyKo": "둥근 정도와 모서리 모양을 따로 적지 않아도 된다. 스쿼클·노치 같은 모양을 디자인 토큰 하나로 다루기 쉬워진다.",
+  "exampleLang": "css",
+  "exampleCode": ".card {\n  corner: 24px squircle;\n}",
+  "guideKo": "`corner-shape`를 모르는 브라우저에서는 일반 둥근 모서리로 보이도록 `border-radius`를 먼저 적어 둔다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": "limited",
+  "featureTest": {
+    "kind": "css",
+    "decl": "corner: 24px squircle"
+  },
+  "demo": {
+    "html": "<div class=\"row\">\n  <div class=\"b\" style=\"--s: round\">round</div>\n  <div class=\"b\" style=\"--s: squircle\">squircle</div>\n  <div class=\"b\" style=\"--s: scoop\">scoop</div>\n  <div class=\"b\" style=\"--s: bevel\">bevel</div>\n  <div class=\"b\" style=\"--s: notch\">notch</div>\n</div>",
+    "css": ".row { display: flex; flex-wrap: wrap; gap: 14px; }\n.b {\n  width: 96px; height: 96px;\n  display: grid; place-items: center;\n  background: var(--demo-accent); color: #0b1020;\n  font: 600 13px/1 var(--demo-mono);\n  corner: var(--r) var(--s);\n}",
+    "hint": "슬라이더로 모서리 크기를 바꿔 보세요. 상자마다 모양이 다릅니다.",
+    "controls": [
+      {
+        "var": "--r",
+        "label": "크기",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "px",
+        "value": 28
+      }
+    ],
+    "fallback": {
+      "html": "<div class=\"row\">\n  <div class=\"b\">round</div><div class=\"b\">squircle</div><div class=\"b\">scoop</div><div class=\"b\">bevel</div><div class=\"b\">notch</div>\n</div>",
+      "css": ".row { display: flex; flex-wrap: wrap; gap: 14px; }\n.b {\n  width: 96px; height: 96px;\n  display: grid; place-items: center;\n  background: var(--demo-muted); color: #0b1020;\n  font: 600 13px/1 var(--demo-mono);\n  border-radius: var(--r);\n}"
+    }
+  },
+  "preview": {
+    "html": "<div class=\"card\">corner</div>",
+    "css": ".card { width: 120px; height: 72px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 22%, transparent); border: 2px solid var(--accent); font: 12px var(--mono); }"
+  },
+  "before": {
+    "lang": "css",
+    "code": ".card {\n  border-radius: 24px;\n  corner-shape: squircle;\n}"
+  },
+  "after": {
+    "lang": "css",
+    "code": ".card {\n  corner: 24px squircle;\n}"
+  },
+  "needsCheck": [
+    "exampleCode",
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5152215540039680",
+    "https://chromestatus.com/release-notes/157",
+    "https://chromestatuslite.com/?version=157",
+    "https://developer.mozilla.org/ko/search?q=corner-shape"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}
