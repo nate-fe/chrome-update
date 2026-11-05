@@ -4,7 +4,7 @@
   "title": "권한 정책 `focus-without-user-activation`",
   "category": "js",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "임베드한 콘텐츠가 사용자 조작 없이 `focus()` 등으로 포커스를 가져가지 못하게 막는 권한 정책이 추가된다.",

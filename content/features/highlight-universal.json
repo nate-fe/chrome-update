@@ -4,7 +4,7 @@
   "title": "`::highlight(*)` 전체 하이라이트 선택자",
   "category": "css",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "`::highlight(*)`로 이름과 관계없이 모든 사용자 정의 하이라이트를 한 번에 꾸민다.",

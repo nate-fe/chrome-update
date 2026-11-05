@@ -4,7 +4,7 @@
   "title": "`circle()` · `ellipse()`의 `closest-corner` · `farthest-corner`",
   "category": "css",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "`circle()`, `ellipse()` 도형 함수의 반지름에 `closest-corner`, `farthest-corner`를 쓸 수 있다.",

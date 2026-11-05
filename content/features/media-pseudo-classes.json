@@ -4,7 +4,7 @@
   "title": "미디어 상태 의사 클래스 `:playing` · `:paused` 등",
   "category": "css",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "`<audio>`, `<video>`의 상태에 따라 `:playing`, `:paused`, `:seeking`, `:buffering`, `:stalled`, `:muted`, `:volume-locked`가 맞는다.",
