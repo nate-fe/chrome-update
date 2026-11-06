@@ -4,7 +4,7 @@
   "title": "웹 앱 설치 `navigator.install()` · `<install>`",
   "category": "js",
   "impact": "new",
-  "status": "shipped",
+  "status": "beta",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,11 +12,6 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
-    },
-    {
-      "milestone": 158,
-      "channel": "stable",
-      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "매니페스트 URL로 웹 앱 설치를 요청하는 `navigator.install()`과 `<install>` 요소가 추가된다. 다른 출처의 웹 앱도 설치를 제안할 수 있다.",

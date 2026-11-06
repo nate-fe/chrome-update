@@ -8,6 +8,7 @@ import {
   readReleases,
   readState,
   stableDate,
+  today,
   writeFeature,
   writeLog,
   writeRelease,
@@ -17,8 +18,14 @@ import {
 } from './lib.ts';
 
 const changes: Change[] = [];
-const { stable, beta } = await currentChannels();
-console.log(`Chromium Dash: stable ${stable}, beta ${beta}`);
+const dash = await currentChannels();
+const { beta } = dash;
+// Chrome은 정식 출시일 1~2주 전에 일부 사용자에게 먼저 배포한다(early stable).
+// 이때도 Dash의 Stable 채널에 새 버전이 잡히므로, 출시일이 지나기 전까지는 이전 버전을 stable로 본다.
+const stable = (await stableDate(dash.stable)) > today() ? dash.stable - 1 : dash.stable;
+console.log(
+  `Chromium Dash: stable ${dash.stable}${stable !== dash.stable ? ` (early stable, 출시일 전이라 ${stable}로 봄)` : ''}, beta ${beta}`,
+);
 
 // ───────── 1. 버전(릴리스) 파일 ─────────
 const releases = readReleases();

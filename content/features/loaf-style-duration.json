@@ -4,8 +4,8 @@
   "title": "Long Animation Frames `styleDuration`",
   "category": "js",
   "impact": "new",
-  "status": "postponed",
-  "milestone": 157,
+  "status": "beta",
+  "milestone": 158,
   "tags": [],
   "history": [
     {
@@ -17,6 +17,11 @@
       "milestone": 157,
       "channel": "mention",
       "note": "Chrome 157 stable에서 기본 비활성 확인 (2026-11-05, 자동 검사)"
+    },
+    {
+      "milestone": 158,
+      "channel": "beta",
+      "note": "Chromium 158 소스(runtime_enabled_features)에서 stable(기본 활성), 158 beta 검사에서 지원 확인"
     }
   ],
   "summaryKo": "Long Animation Frames 항목에 `styleDuration`, `forcedStyleDuration`이 추가되어 스타일 계산에 쓴 시간을 따로 볼 수 있다.",
@@ -37,8 +42,7 @@
   "before": null,
   "after": null,
   "needsCheck": [
-    "featureTest",
-    "milestone"
+    "featureTest"
   ],
   "sources": [
     "https://chromestatus.com/feature/5171478175809536",

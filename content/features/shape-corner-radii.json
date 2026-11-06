@@ -4,7 +4,7 @@
   "title": "`circle()` · `ellipse()`의 `closest-corner` · `farthest-corner`",
   "category": "css",
   "impact": "new",
-  "status": "shipped",
+  "status": "postponed",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -15,8 +15,8 @@
     },
     {
       "milestone": 158,
-      "channel": "stable",
-      "note": "2026-11-17 stable 출시"
+      "channel": "mention",
+      "note": "Chromium 158 소스(runtime_enabled_features)에서 experimental(기본 비활성), 158 beta 검사에서도 미지원 확인"
     }
   ],
   "summaryKo": "`circle()`, `ellipse()` 도형 함수의 반지름에 `closest-corner`, `farthest-corner`를 쓸 수 있다.",
@@ -41,7 +41,8 @@
   "before": null,
   "after": null,
   "needsCheck": [
-    "support"
+    "support",
+    "milestone"
   ],
   "sources": [
     "https://chromestatus.com/feature/5100672946143232",

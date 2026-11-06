@@ -4,7 +4,7 @@
   "title": "`flow-start` · `flow-end` 정렬 키워드",
   "category": "css",
   "impact": "new",
-  "status": "shipped",
+  "status": "beta",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,11 +12,6 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
-    },
-    {
-      "milestone": 158,
-      "channel": "stable",
-      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "정렬 속성에 `flow-start`, `flow-end` 키워드가 추가된다. `flex-start`, `flex-end`의 별칭이다.",

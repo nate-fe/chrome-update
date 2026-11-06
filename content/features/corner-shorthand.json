@@ -22,6 +22,11 @@
       "milestone": 157,
       "channel": "mention",
       "note": "Chrome 157 stable에서 기본 비활성 확인 (2026-11-05, 자동 검사)"
+    },
+    {
+      "milestone": 158,
+      "channel": "mention",
+      "note": "Chromium 158 소스(runtime_enabled_features)에서도 experimental(기본 비활성), 158 beta 검사에서도 미지원 확인"
     }
   ],
   "summaryKo": "모서리별 `border-radius`와 `corner-shape`를 한 속성으로 지정한다.",
