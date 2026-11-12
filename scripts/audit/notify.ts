@@ -39,8 +39,10 @@ function buildMessage(cur: AuditResult, items: Item[], resolved: Item[]): string
   }
 
   if (resolved.length) {
-    lines.push('', `해결됨 ${resolved.length}건`);
-    for (const it of resolved) lines.push(`· ${it.group} — ${it.file}`);
+    // 같은 파일의 여러 줄이 함께 해결되면 한 줄로
+    const done = [...new Set(resolved.map((it) => `${it.group} — ${it.file}`))];
+    lines.push('', `해결됨 ${done.length}건`);
+    for (const d of done) lines.push(`· ${d}`);
   }
 
   const external = cur.findings.filter((f) => !f.own && f.level === 'fix').length + cur.runtime.filter((w) => !w.own).length;

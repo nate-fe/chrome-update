@@ -84,7 +84,8 @@ export function itemsOf(r: AuditResult): Item[] {
       key: f.key,
       level: f.level,
       group: f.title.replace(/`/g, ''),
-      reason: GROUP_REASONS[f.slug] ?? f.noteKo.replace(/`/g, ''),
+      // 묶음 공통 문구는 '고쳐야 함'에만 쓴다. '확인 필요'는 규칙마다 확인할 내용이 다르다
+      reason: (f.level === 'fix' && GROUP_REASONS[f.slug]) || f.noteKo.replace(/`/g, ''),
       file: shortFile(f.url),
       url: f.url,
       line: f.line,

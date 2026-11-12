@@ -30,14 +30,15 @@
   },
   {
     "slug": "document-domain",
-    "title": "`document.domain` 설정",
+    "title": "`document.domain`",
     "status": "deprecated",
     "milestone": 115,
     "link": "https://developer.chrome.com/blog/document-domain-setter-deprecation",
     "guideKo": "서브도메인 사이 통신은 `postMessage`로 바꾼다. 당장 바꾸기 어렵다면 응답 헤더 `Origin-Agent-Cluster: ?0`으로 임시로 유지할 수 있다.",
     "skipLibraries": false,
     "scan": [
-      { "lang": "js", "pattern": "\\bdocument\\.domain\\s*=(?!=)", "level": "fix", "noteKo": "Chrome 115부터 기본적으로 `document.domain` 설정이 무시되어 서브도메인 사이 접근이 막힌다" }
+      { "lang": "js", "pattern": "\\bdocument\\.domain\\s*=(?!=)", "level": "fix", "noteKo": "Chrome 115부터 기본적으로 `document.domain` 설정이 무시되어 서브도메인 사이 접근이 막힌다" },
+      { "lang": "js", "pattern": "\\bdocument\\.domain\\b", "level": "check", "noteKo": "`document.domain`을 읽는 곳. Chrome 115부터 설정이 무시되어 값이 `nate.com`으로 바뀌지 않으므로, 이 값을 비교하거나 넘기는 코드가 기대대로 동작하는지 확인한다" }
     ]
   },
   {

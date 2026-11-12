@@ -202,23 +202,97 @@ function legacyRules(): CompiledRule[] {
   );
 }
 
+/** 정규식 앞에 올 수 있는 문자. 이 뒤의 / 는 나눗셈이 아니라 정규식의 시작으로 본다 */
+const BEFORE_REGEX = '(,=:[!&|?{};+-*%<>~^';
+
+/**
+ * 주석을 같은 길이의 공백으로 바꾼다. 줄바꿈은 남겨 줄·열 위치가 그대로다.
+ * 문자열·정규식 안의 `//`, `/*`(예: 'http://…')는 주석으로 보지 않는다.
+ * HTML은 `<!-- -->`만 지운다 (본문의 http:// 같은 글자를 건드리지 않도록 인라인 스크립트의 주석은 그대로 둔다).
+ */
+export function maskComments(text: string, kind: Lang): string {
+  const blank = (s: string) => s.replace(/[^\r\n]/g, ' ');
+  if (kind === 'html') return text.replace(/<!--[\s\S]*?-->/g, blank);
+
+  const out = text.split('');
+  const fill = (from: number, to: number) => {
+    for (let k = from; k < to; k++) if (out[k] !== '\n' && out[k] !== '\r') out[k] = ' ';
+  };
+  const n = text.length;
+  let prev = ''; // 공백이 아닌 마지막 문자 (정규식인지 나눗셈인지 가른다)
+  let i = 0;
+  while (i < n) {
+    const c = text[i];
+    const d = text[i + 1];
+    if (c === '/' && d === '*') {
+      const end = text.indexOf('*/', i + 2);
+      const to = end < 0 ? n : end + 2;
+      fill(i, to);
+      i = to;
+      continue;
+    }
+    if (kind === 'js' && c === '/' && d === '/') {
+      const end = text.indexOf('\n', i);
+      const to = end < 0 ? n : end;
+      fill(i, to);
+      i = to;
+      continue;
+    }
+    if (c === '"' || c === "'" || (kind === 'js' && c === '`')) {
+      let k = i + 1;
+      while (k < n && text[k] !== c) {
+        if (text[k] === '\\') k++;
+        else if (c !== '`' && text[k] === '\n') break; // 닫히지 않은 문자열은 줄 끝에서 멈춘다
+        k++;
+      }
+      i = k + 1;
+      prev = c;
+      continue;
+    }
+    if (kind === 'js' && c === '/' && (prev === '' || BEFORE_REGEX.includes(prev))) {
+      let k = i + 1;
+      let inClass = false;
+      while (k < n && text[k] !== '\n') {
+        const ch = text[k];
+        if (ch === '\\') {
+          k += 2;
+          continue;
+        }
+        if (ch === '[') inClass = true;
+        else if (ch === ']') inClass = false;
+        else if (ch === '/' && !inClass) break;
+        k++;
+      }
+      i = k + 1;
+      prev = '/';
+      continue;
+    }
+    if (c !== ' ' && c !== '\t' && c !== '\n' && c !== '\r') prev = c;
+    i++;
+  }
+  return out.join('');
+}
+
 function scanSource(src: Source, rules: CompiledRule[]): Finding[] {
   const starts = lineStarts(src.text);
   const found = new Map<string, Finding>();
   const isLibrary = LIBRARY.test(stableUrl(src.url));
+  // 주석 안의 코드는 실행되지 않으므로 찾지 않는다. 위치는 원본과 같다
+  const code = maskComments(src.text, src.kind);
   for (const { feature, rule, re } of rules) {
     if (!APPLIES[src.kind].includes(rule.lang)) continue;
     if (feature.skipLibraries && isLibrary) continue;
     re.lastIndex = 0;
-    for (let m = re.exec(src.text); m; m = re.exec(src.text)) {
+    for (let m = re.exec(code); m; m = re.exec(code)) {
       if (m[0].length === 0) re.lastIndex++;
       const { line, col } = position(starts, m.index);
-      // 같은 기능이 같은 줄에서 여러 규칙에 걸리면 한 번만
+      // 같은 기능이 같은 줄에서 여러 규칙에 걸리면 한 번만 (규칙 순서대로: 고쳐야 함이 확인 필요보다 먼저)
       const dedupe = `${feature.slug}|${line}`;
       if (found.has(dedupe)) continue;
-      const match = m[0].length > 80 ? `${m[0].slice(0, 80)}…` : m[0];
+      const original = src.text.slice(m.index, m.index + m[0].length);
+      const match = original.length > 80 ? `${original.slice(0, 80)}…` : original;
       found.set(dedupe, {
-        key: `${feature.slug}|${stableUrl(src.url)}|${m[0].replace(/\s+/g, ' ').slice(0, 120)}`,
+        key: `${feature.slug}|${stableUrl(src.url)}|${original.replace(/\s+/g, ' ').slice(0, 120)}`,
         slug: feature.slug,
         title: feature.title,
         level: rule.level,
