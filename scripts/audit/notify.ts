@@ -3,16 +3,17 @@
 // 실행: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send] [--force]
 //  - 메시지를 표준 출력과 <이번 결과 폴더>/message.txt에 쓴다.
 //  - --send: 새로 생기거나 해결된 '수정 필요'가 있을 때만 TEAMROOM_WEBHOOK_URL로 보낸다.
-//  - --force: 결과가 같아도 보낸다 (확인용). 메시지 끝에 확인용이라고 적는다.
+//  - --force: 결과가 같아도 보낸다 (확인용). 제목 앞에 (TEST)를 붙인다.
 //  - 검사 오류(페이지 접속 실패 등)가 있으면 비교하지 않고 실패 알림을 보낸 뒤 종료 코드 2로 끝낸다.
 //    (일부 페이지가 빠진 결과로 비교하면 '해결됨'으로 잘못 나오기 때문)
-// 환경 변수: TEAMROOM_WEBHOOK_URL(네이트온 팀룸 인커밍 웹훅), REPORT_URL(보고서 링크, 선택)
+// 환경 변수: TEAMROOM_WEBHOOK_URL(네이트온 팀룸 인커밍 웹훅)
+// 메시지에 링크를 넣지 않는다. 점검 저장소는 비공개라 팀원 대부분이 열 수 없으므로, 고칠 곳의 코드 조각을 메시지에 직접 넣는다.
 import fs from 'node:fs';
 import path from 'node:path';
 import type { AuditResult } from './scan.ts';
 
 /** 팀룸에 올릴 '수정 필요' 한 건: 네이트 파일의 '고쳐야 함' + 네이트 파일의 Chrome 실행 경고 */
-type Item = { key: string; group: string; reason: string; file: string; line: number };
+type Item = { key: string; group: string; reason: string; file: string; line: number; snippet: string | null };
 
 /**
  * Chrome 실행 경고 종류별 설명. 사이트에 정리되지 않은 경고가 많아 자주 나오는 것만 적어 둔다.
@@ -44,6 +45,16 @@ const GROUP_REASONS: Record<string, string> = {
   'mutation-events': 'DOMNodeInserted 같은 Mutation Events는 Chrome 127부터 발생하지 않습니다. MutationObserver로 바꿔야 합니다.',
 };
 
+/** 메시지에 넣을 코드 조각: 걸린 코드를 중심으로 100자 안쪽으로 자른다 (압축 파일은 한 줄이 매우 길다) */
+function shortSnippet(snippet: string | null, match?: string): string | null {
+  if (!snippet) return null;
+  const text = snippet.replace(/\s+/g, ' ').replace(/^…|…$/g, '').trim();
+  if (text.length <= 100) return text;
+  const at = match ? Math.max(0, text.indexOf(match.slice(0, 20))) : 0;
+  const from = Math.max(0, at - 30);
+  return `${from > 0 ? '…' : ''}${text.slice(from, from + 100)}…`;
+}
+
 function shortFile(url: string): string {
   return url.replace(/^https?:\/\//, '').replace(/[?#].*$/, '');
 }
@@ -58,6 +69,7 @@ function itemsOf(r: AuditResult): Item[] {
       reason: GROUP_REASONS[f.slug] ?? f.noteKo.replace(/`/g, ''),
       file: shortFile(f.url),
       line: f.line,
+      snippet: shortSnippet(f.snippet, f.match),
     });
   }
   for (const w of r.runtime) {
@@ -66,9 +78,10 @@ function itemsOf(r: AuditResult): Item[] {
     items.push({
       key: w.key,
       group: known?.group ?? w.type,
-      reason: known?.reason ?? `Chrome이 deprecation 경고(${w.type})를 냅니다. 자세한 내용은 보고서를 확인해 주세요.`,
+      reason: known?.reason ?? `Chrome이 deprecation 경고(${w.type})를 냅니다.`,
       file: shortFile(w.url),
       line: w.line,
+      snippet: shortSnippet(w.snippet),
     });
   }
   return items;
@@ -79,23 +92,24 @@ function kst(iso: string): string {
   return d.toISOString().slice(0, 16).replace('T', ' ');
 }
 
-function buildMessage(cur: AuditResult, items: Item[], fresh: Set<string>, resolved: Item[]): string {
+function buildMessage(cur: AuditResult, items: Item[], resolved: Item[]): string {
   const lines = [`[Chrome 변경 점검] deprecated 관련 수정 필요 - ${items.length}건 · ${kst(cur.at)}`];
 
   const groups = new Map<string, Item[]>();
   for (const it of items) groups.set(it.group, [...(groups.get(it.group) ?? []), it]);
   for (const [group, list] of groups) {
     lines.push('', `${group}: ${list[0].reason}`);
-    // 같은 파일의 여러 줄은 한 줄로
-    const byFile = new Map<string, { lines: number[]; fresh: boolean }>();
+    // 같은 파일의 여러 줄은 한 줄로 묶고, 그 아래에 코드 조각을 (같은 조각은 한 번만) 붙인다
+    const byFile = new Map<string, { nums: number[]; snippets: string[] }>();
     for (const it of list) {
-      const e = byFile.get(it.file) ?? { lines: [], fresh: false };
-      if (!e.lines.includes(it.line)) e.lines.push(it.line);
-      e.fresh ||= fresh.has(it.key);
+      const e = byFile.get(it.file) ?? { nums: [], snippets: [] };
+      if (!e.nums.includes(it.line)) e.nums.push(it.line);
+      if (it.snippet && !e.snippets.includes(it.snippet)) e.snippets.push(it.snippet);
       byFile.set(it.file, e);
     }
     for (const [file, e] of byFile) {
-      lines.push(`· ${file} ${e.lines.sort((a, b) => a - b).join(', ')}줄${e.fresh ? ' (새로)' : ''}`);
+      lines.push(`· ${file} ${e.nums.sort((a, b) => a - b).join(', ')}줄`);
+      for (const sn of e.snippets.slice(0, 3)) lines.push(`   ${sn}`);
     }
   }
 
@@ -105,10 +119,9 @@ function buildMessage(cur: AuditResult, items: Item[], fresh: Set<string>, resol
   }
 
   const external = cur.findings.filter((f) => !f.own && f.level === 'fix').length + cur.runtime.filter((w) => !w.own).length;
-  if (external) lines.push('', `외부 파일(광고·통계) ${external}건은 보고서를 참고해 주세요.`);
+  if (external) lines.push('', `외부 파일(광고·통계) ${external}건은 직접 고칠 수 없어 건수에서 뺐습니다.`);
 
   lines.push('', `검사: 페이지 ${cur.targets.length}개 · 파일 ${cur.files.length}개 · ${cur.chromium ? `Chromium ${cur.chromium}` : '파일만 받아 검사'}`);
-  if (process.env.REPORT_URL) lines.push(`자세히: ${process.env.REPORT_URL}`);
   return lines.join('\n');
 }
 
@@ -131,6 +144,8 @@ const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const SEND = process.argv.includes('--send');
 /** 결과가 같아도 보낸다 (Run workflow의 '변화가 없어도 보내기') */
 const FORCE = process.argv.includes('--force');
+/** 확인용으로 보낸 메시지는 제목 앞에 (TEST)를 붙여 평소 알림과 구분한다 */
+const PREFIX = FORCE ? '(TEST) ' : '';
 const [curFile, prevFile] = args;
 if (!curFile) {
   console.error('사용법: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send] [--force]');
@@ -141,8 +156,7 @@ const prev = prevFile && fs.existsSync(prevFile) ? (JSON.parse(fs.readFileSync(p
 const outFile = path.join(path.dirname(curFile), 'message.txt');
 
 if (cur.errors.length) {
-  const text = [`[Chrome 변경 점검] 점검 실패 · ${kst(cur.at)}`, '', ...cur.errors.map((e) => `· ${e}`), '', '배포로 파일 주소가 바뀌었거나(files.json 수정 필요) 일시적인 접속 문제일 수 있습니다. 이번 결과는 비교에 쓰지 않습니다.']
-    .concat(process.env.REPORT_URL ? [`자세히: ${process.env.REPORT_URL}`] : [])
+  const text = [`${PREFIX}[Chrome 변경 점검] 점검 실패 · ${kst(cur.at)}`, '', ...cur.errors.map((e) => `· ${e}`), '', '배포로 파일 주소가 바뀌었거나(files.json 수정 필요) 일시적인 접속 문제일 수 있습니다. 이번 결과는 비교에 쓰지 않습니다.']
     .join('\n');
   fs.writeFileSync(outFile, text + '\n');
   console.log(text);
@@ -158,8 +172,7 @@ const fresh = new Set(items.filter((i) => !prevKeys.has(i.key)).map((i) => i.key
 const resolved = prevItems.filter((i) => !curKeys.has(i.key));
 
 const unchanged = fresh.size === 0 && resolved.length === 0;
-let text = buildMessage(cur, items, fresh, resolved);
-if (FORCE && unchanged) text += '\n\n※ 지난 점검과 결과가 같지만 확인용으로 보낸 메시지입니다.';
+const text = PREFIX + buildMessage(cur, items, resolved);
 fs.writeFileSync(outFile, text + '\n');
 console.log(text);
 
