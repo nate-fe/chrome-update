@@ -41,6 +41,20 @@
   "needsCheck": [
     "support"
   ],
+  "scan": [
+    {
+      "lang": "js",
+      "pattern": "\\bXSLTProcessor\\b",
+      "level": "fix",
+      "noteKo": "`XSLTProcessor`는 158부터 동작하지 않는다"
+    },
+    {
+      "lang": "html",
+      "pattern": "<\\?xml-stylesheet[^>]*xsl",
+      "level": "fix",
+      "noteKo": "XML 문서의 XSL 처리 명령이 158부터 적용되지 않는다"
+    }
+  ],
   "sources": [
     "https://chromestatus.com/feature/4709671889534976",
     "https://developer.chrome.com/docs/web-platform/deprecating-xslt",

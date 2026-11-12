@@ -31,6 +31,14 @@
   "before": null,
   "after": null,
   "needsCheck": [],
+  "scan": [
+    {
+      "lang": "js",
+      "pattern": "\\bbackgroundFetch\\.fetch\\s*\\(",
+      "level": "check",
+      "noteKo": "다른 출처 파일을 받는다면 그 서버에 CORS 헤더가 필요하다"
+    }
+  ],
   "sources": [
     "https://chromestatus.com/feature/6210300985606144",
     "https://chromestatus.com/release-notes/157",

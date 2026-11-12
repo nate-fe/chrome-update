@@ -31,6 +31,20 @@
   "needsCheck": [
     "support"
   ],
+  "scan": [
+    {
+      "lang": "css",
+      "pattern": "(?<![\\w.#-])(?:object|embed)(?![\\w-])[^{}]*\\{[^}]*object-(?:fit|position)\\s*:",
+      "level": "check",
+      "noteKo": "`<object>`·`<embed>`의 SVG에 `object-fit`·`object-position`이 적용되기 시작한다. 화면을 확인한다"
+    },
+    {
+      "lang": "html",
+      "pattern": "<(?:object|embed)\\b[^>]*style\\s*=\\s*[\"'][^\"']*object-(?:fit|position)",
+      "level": "check",
+      "noteKo": "`<object>`·`<embed>`의 SVG에 `object-fit`·`object-position`이 적용되기 시작한다. 화면을 확인한다"
+    }
+  ],
   "sources": [
     "https://chromestatus.com/feature/4886345347629056",
     "https://html.spec.whatwg.org/multipage/rendering.html#embedded-content-rendering-rules"

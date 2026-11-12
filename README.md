@@ -21,6 +21,23 @@ npm run build    # out/ 에 정적 사이트 생성 (콘텐츠 형식 검사 포
 | `content/features/<slug>.json` | 기능 항목 (형식: `src/lib/schema.ts`) |
 | `content/pipeline-state.json` | 싣지 않기로 한 ChromeStatus 기능과 이유 |
 
+## 서비스 점검
+
+제거·동작 변경 기능을 서비스 코드에서 쓰는 곳을 찾아 위치(파일:줄:열)를 알려 줍니다.
+
+```bash
+node scripts/audit/scan.ts --files files.json     # 목록의 CSS·JS 파일만 받아 검사 (자동 점검은 이 방식)
+node scripts/audit/scan.ts ../my-service/src      # 소스 폴더 검사
+node scripts/audit/scan.ts https://www.nate.com/  # 페이지를 열어 검사 — 실제 방문이라 PV·광고·통계에 잡힘
+```
+
+- **규칙:** 기능 JSON의 `scan`과 [`scripts/audit/legacy-rules.json`](scripts/audit/legacy-rules.json)의 정규식으로 HTML·CSS·JS를 찾습니다. `legacy-rules.json`에는 이 사이트가 다루기 전부터 Chrome이 경고하던 기능(동기 XHR, unload 이벤트, `document.domain` 설정, Mutation Events)이 들어 있습니다.
+- **파일 목록 방식 (`--files`):** 목록의 파일만 HTTP로 받고 스크립트는 실행하지 않습니다. 광고 응답(`cyad*.nate.com`)과 확장자 없는 서버 응답은 받지 않습니다. 목록 형식은 `{ "pages": [{ "name", "device", "files": [{ "type": "css"|"js", "url" }] }] }`입니다.
+- **페이지 방식 (URL):** Playwright Chromium으로 페이지를 열어 Chrome이 내는 deprecation 경고까지 모읍니다. 실제 방문이라 서비스 점검에는 쓰지 않습니다.
+- 옵션: `--targets 목록.txt`(URL·폴더를 한 줄에 하나), `--own nate.com,nateimg.co.kr`(우리 도메인, 나머지는 외부로 분류), `--out 폴더`(기본 `audit-out/`)
+- 결과: `audit-out/result.json`, `audit-out/report.html`. **점검 결과는 이 공개 저장소에 올리지 않습니다.**
+- 알림: `node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send]`는 지난 결과와 비교해 팀룸 메시지를 만듭니다. `--send`를 주고 새로 생기거나 해결된 "수정 필요"가 있으면 `TEAMROOM_WEBHOOK_URL`로 보냅니다. 매일 실행과 알림은 비공개 저장소 `nate-fe/chrome-update-audit`의 Actions가 맡습니다.
+
 ## 자동 업데이트
 
 GitHub Actions가 매일 09:02(한국 시간)경에 다음을 합니다.

@@ -42,6 +42,26 @@
     "code": "if (window.fence) {\n  window.fence.reportEvent({ eventType: 'click', destination: ['buyer'] });\n}"
   },
   "needsCheck": [],
+  "scan": [
+    {
+      "lang": "html",
+      "pattern": "<fencedframe\\b",
+      "level": "fix",
+      "noteKo": "`<fencedframe>`은 156부터 동작하지 않고 157부터 단계적으로 제거된다"
+    },
+    {
+      "lang": "js",
+      "pattern": "['\"]fencedframe['\"]",
+      "level": "fix",
+      "noteKo": "`<fencedframe>`을 스크립트로 만드는 곳 — 156부터 동작하지 않는다"
+    },
+    {
+      "lang": "js",
+      "pattern": "\\bwindow\\.fence\\b",
+      "level": "fix",
+      "noteKo": "`window.fence`는 156부터 아무 동작도 하지 않는다. 존재 여부를 확인한 뒤 호출한다"
+    }
+  ],
   "sources": [
     "https://chromestatus.com/feature/6366274495053824",
     "https://chromestatus.com/release-notes/156",
