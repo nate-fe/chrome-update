@@ -1,8 +1,9 @@
 // 점검 결과를 지난 결과와 비교해 팀룸 알림 메시지를 만들고, 바뀐 게 있으면 보낸다.
 //
-// 실행: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send]
+// 실행: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send] [--force]
 //  - 메시지를 표준 출력과 <이번 결과 폴더>/message.txt에 쓴다.
 //  - --send: 새로 생기거나 해결된 '수정 필요'가 있을 때만 TEAMROOM_WEBHOOK_URL로 보낸다.
+//  - --force: 결과가 같아도 보낸다 (확인용). 메시지 끝에 확인용이라고 적는다.
 //  - 검사 오류(페이지 접속 실패 등)가 있으면 비교하지 않고 실패 알림을 보낸 뒤 종료 코드 2로 끝낸다.
 //    (일부 페이지가 빠진 결과로 비교하면 '해결됨'으로 잘못 나오기 때문)
 // 환경 변수: TEAMROOM_WEBHOOK_URL(네이트온 팀룸 인커밍 웹훅), REPORT_URL(보고서 링크, 선택)
@@ -128,9 +129,11 @@ async function send(text: string) {
 
 const args = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const SEND = process.argv.includes('--send');
+/** 결과가 같아도 보낸다 (Run workflow의 '변화가 없어도 보내기') */
+const FORCE = process.argv.includes('--force');
 const [curFile, prevFile] = args;
 if (!curFile) {
-  console.error('사용법: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send]');
+  console.error('사용법: node scripts/audit/notify.ts <이번 result.json> [지난 result.json] [--send] [--force]');
   process.exit(1);
 }
 const cur = JSON.parse(fs.readFileSync(curFile, 'utf8')) as AuditResult;
@@ -154,15 +157,17 @@ const curKeys = new Set(items.map((i) => i.key));
 const fresh = new Set(items.filter((i) => !prevKeys.has(i.key)).map((i) => i.key));
 const resolved = prevItems.filter((i) => !curKeys.has(i.key));
 
-const text = buildMessage(cur, items, fresh, resolved);
+const unchanged = fresh.size === 0 && resolved.length === 0;
+let text = buildMessage(cur, items, fresh, resolved);
+if (FORCE && unchanged) text += '\n\n※ 지난 점검과 결과가 같지만 확인용으로 보낸 메시지입니다.';
 fs.writeFileSync(outFile, text + '\n');
 console.log(text);
 
 // Actions에서 '지난 결과'를 새로 저장할지 알려 준다 (바뀐 게 없으면 커밋하지 않도록)
-const changed = !prev || fresh.size > 0 || resolved.length > 0;
+const changed = !prev || !unchanged;
 if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `changed=${changed}\n`);
 
-if (fresh.size === 0 && resolved.length === 0) {
+if (unchanged && !FORCE) {
   console.log('\n지난 결과와 같아 보내지 않음');
 } else if (SEND) {
   await send(text);
