@@ -6,91 +6,16 @@
 //  - --force: 결과가 같아도 보낸다 (확인용). 제목 앞에 (TEST)를 붙인다.
 //  - 검사 오류(페이지 접속 실패 등)가 있으면 비교하지 않고 실패 알림을 보낸 뒤 종료 코드 2로 끝낸다.
 //    (일부 페이지가 빠진 결과로 비교하면 '해결됨'으로 잘못 나오기 때문)
-// 환경 변수: TEAMROOM_WEBHOOK_URL(네이트온 팀룸 인커밍 웹훅)
-// 메시지에 링크를 넣지 않는다. 점검 저장소는 비공개라 팀원 대부분이 열 수 없으므로, 고칠 곳의 코드 조각을 메시지에 직접 넣는다.
+// 환경 변수: TEAMROOM_WEBHOOK_URL(네이트온 팀룸 인커밍 웹훅), SHEET_URL(현황 시트 주소, 선택)
+// 점검 저장소(GitHub) 링크는 넣지 않는다. 비공개라 팀원 대부분이 열 수 없으므로 고칠 곳의 코드 조각을 메시지에 직접 넣고,
+// 링크는 회사 계정으로 보는 현황 시트만 넣는다.
 import fs from 'node:fs';
 import path from 'node:path';
 import type { AuditResult } from './scan.ts';
+import { itemsOf as allItems, kst, type Item } from './items.ts';
 
-/** 팀룸에 올릴 '수정 필요' 한 건: 네이트 파일의 '고쳐야 함' + 네이트 파일의 Chrome 실행 경고 */
-type Item = { key: string; group: string; reason: string; file: string; line: number; snippet: string | null };
-
-/**
- * Chrome 실행 경고 종류별 설명. 사이트에 정리되지 않은 경고가 많아 자주 나오는 것만 적어 둔다.
- * 제거 일정이 있는지 없는지를 구분해서 쓴다.
- */
-const RUNTIME_REASONS: Record<string, { group: string; reason: string }> = {
-  XMLHttpRequestSynchronousInNonWorkerOutsideBeforeUnload: {
-    group: '동기 XHR',
-    reason: '응답이 올 때까지 페이지가 멈춰서 Chrome이 deprecated로 경고하는 기능입니다. 제거 일정은 없지만 비동기로 불러오도록 바꿔야 합니다.',
-  },
-  UnloadHandler: {
-    group: 'unload 이벤트',
-    reason: 'Chrome이 unload 이벤트를 단계적으로 없애고 있어 실행되지 않을 수 있습니다. pagehide나 visibilitychange로 바꿔야 합니다.',
-  },
-  FencedFrame: {
-    group: 'Fenced frame',
-    reason: 'Chrome 156부터 <fencedframe>과 window.fence가 동작하지 않습니다.',
-  },
-};
-
-/**
- * legacy-rules.json 항목의 묶음 설명. 규칙마다 noteKo가 달라(예: `async: false`, jQuery `<script>`)
- * 첫 항목의 설명을 쓰면 다른 파일과 맞지 않으므로 묶음 공통 문구를 쓴다.
- */
-const GROUP_REASONS: Record<string, string> = {
-  'sync-xhr': RUNTIME_REASONS.XMLHttpRequestSynchronousInNonWorkerOutsideBeforeUnload.reason,
-  'unload-event': RUNTIME_REASONS.UnloadHandler.reason,
-  'document-domain': 'Chrome 115부터 기본적으로 document.domain 설정이 무시되어 서브도메인 사이 접근이 막힙니다. postMessage로 바꿔야 합니다.',
-  'mutation-events': 'DOMNodeInserted 같은 Mutation Events는 Chrome 127부터 발생하지 않습니다. MutationObserver로 바꿔야 합니다.',
-};
-
-/** 메시지에 넣을 코드 조각: 걸린 코드를 중심으로 100자 안쪽으로 자른다 (압축 파일은 한 줄이 매우 길다) */
-function shortSnippet(snippet: string | null, match?: string): string | null {
-  if (!snippet) return null;
-  const text = snippet.replace(/\s+/g, ' ').replace(/^…|…$/g, '').trim();
-  if (text.length <= 100) return text;
-  const at = match ? Math.max(0, text.indexOf(match.slice(0, 20))) : 0;
-  const from = Math.max(0, at - 30);
-  return `${from > 0 ? '…' : ''}${text.slice(from, from + 100)}…`;
-}
-
-function shortFile(url: string): string {
-  return url.replace(/^https?:\/\//, '').replace(/[?#].*$/, '');
-}
-
-function itemsOf(r: AuditResult): Item[] {
-  const items: Item[] = [];
-  for (const f of r.findings) {
-    if (!f.own || f.level !== 'fix') continue;
-    items.push({
-      key: f.key,
-      group: f.title.replace(/`/g, ''),
-      reason: GROUP_REASONS[f.slug] ?? f.noteKo.replace(/`/g, ''),
-      file: shortFile(f.url),
-      line: f.line,
-      snippet: shortSnippet(f.snippet, f.match),
-    });
-  }
-  for (const w of r.runtime) {
-    if (!w.own) continue;
-    const known = RUNTIME_REASONS[w.type];
-    items.push({
-      key: w.key,
-      group: known?.group ?? w.type,
-      reason: known?.reason ?? `Chrome이 deprecation 경고(${w.type})를 냅니다.`,
-      file: shortFile(w.url),
-      line: w.line,
-      snippet: shortSnippet(w.snippet),
-    });
-  }
-  return items;
-}
-
-function kst(iso: string): string {
-  const d = new Date(new Date(iso).getTime() + 9 * 3600_000);
-  return d.toISOString().slice(0, 16).replace('T', ' ');
-}
+/** 팀룸에 올리는 '수정 필요': 네이트 파일의 '고쳐야 함' (동작 변경 '확인 필요'는 현황 시트에만) */
+const itemsOf = (r: AuditResult): Item[] => allItems(r).filter((i) => i.level === 'fix');
 
 function buildMessage(cur: AuditResult, items: Item[], resolved: Item[]): string {
   const lines = [`[Chrome 변경 점검] deprecated 관련 수정 필요 - ${items.length}건 · ${kst(cur.at)}`];
@@ -122,6 +47,8 @@ function buildMessage(cur: AuditResult, items: Item[], resolved: Item[]): string
   if (external) lines.push('', `외부 파일(광고·통계) ${external}건은 직접 고칠 수 없어 건수에서 뺐습니다.`);
 
   lines.push('', `검사: 페이지 ${cur.targets.length}개 · 파일 ${cur.files.length}개 · ${cur.chromium ? `Chromium ${cur.chromium}` : '파일만 받아 검사'}`);
+  // 현황 시트(Google 스프레드시트). 권한이 없는 사람은 '액세스 요청' 화면이 뜬다
+  if (process.env.SHEET_URL) lines.push(`현황: ${process.env.SHEET_URL}`);
   return lines.join('\n');
 }
 
