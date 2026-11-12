@@ -56,5 +56,7 @@ ${runUrl ? `미리보기 스크린샷(적용 전/후)은 [워크플로 실행 �
 
 fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, 'pr-body.md'), body);
-fs.writeFileSync(path.join(OUT, 'meta.json'), JSON.stringify({ statusOnly, hasChanges }, null, 2));
+// 팀룸 알림(notify-pr.ts)이 읽는 요약: 이번에 새로 추가된 버전
+const newVersions = content.map((c) => /^Chrome (\d+) 버전 추가/.exec(c.text)?.[1]).filter((m): m is string => Boolean(m)).map(Number);
+fs.writeFileSync(path.join(OUT, 'meta.json'), JSON.stringify({ statusOnly, hasChanges, newVersions }, null, 2));
 console.log(JSON.stringify({ statusOnly, hasChanges, status: status.length, content: content.length, drafted: log.drafted.length }));

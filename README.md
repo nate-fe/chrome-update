@@ -48,13 +48,15 @@ GitHub Actions가 매일 09:02(한국 시간)경에 다음을 합니다.
 
 - 상태만 바뀐 PR은 자동으로 병합·배포됩니다.
 - 새 버전이 들어간 PR은 사람이 정리하고 병합해야 배포됩니다. 그동안 자동 실행은 쉽니다.
+- 새 버전이 들어간 PR이 새로 열리면 네이트온 팀룸으로 "[Chrome 변경 정리]" 제목과 "Chrome 159 버전이 나와 정리가 필요합니다." 두 줄을 보냅니다 (`scripts/pipeline/notify-pr.ts`). 새 버전이 없는 PR은 알리지 않습니다.
 - 비용 때문에 Claude API 키는 쓰지 않습니다. 새 기능 내용은 사람이 채웁니다.
 
 **처음 한 번 설정**
 
 1. Settings → Pages → Source를 **GitHub Actions**로 바꾼다.
 2. Settings → Actions → General에서 **Allow GitHub Actions to create and approve pull requests**를 켠다.
-3. Actions → **콘텐츠 자동 업데이트** → Run workflow로 첫 실행을 한다.
+3. Settings → Secrets and variables → Actions에 **`TEAMROOM_WEBHOOK_URL`**(네이트온 팀룸 웹훅)을 넣는다. 없으면 팀룸 알림만 건너뜁니다.
+4. Actions → **콘텐츠 자동 업데이트** → Run workflow로 첫 실행을 한다.
 
 ## 새 버전이 나오면 할 일
 

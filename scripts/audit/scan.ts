@@ -17,6 +17,7 @@ import type { Page } from 'playwright';
 import { ScanRuleSchema, type Feature, type Lang, type ScanRule } from '../../src/lib/schema.ts';
 import { readFeatures } from '../pipeline/lib.ts';
 import { renderReport } from './report.ts';
+import { download } from './fetch.ts';
 
 // ───────── 인자 ─────────
 
@@ -423,38 +424,6 @@ function skipReason(url: string): string | null {
   return null;
 }
 
-/** 대부분 UTF-8이지만 오래된 파일은 EUC-KR일 수 있다 */
-function decode(buf: ArrayBuffer, contentType: string): string {
-  const declared = /charset=["']?([\w-]+)/i.exec(contentType)?.[1];
-  if (declared) {
-    try {
-      return new TextDecoder(declared).decode(buf);
-    } catch {
-      // 모르는 이름이면 아래에서 추측
-    }
-  }
-  try {
-    return new TextDecoder('utf-8', { fatal: true }).decode(buf);
-  } catch {
-    return new TextDecoder('euc-kr').decode(buf);
-  }
-}
-
-async function download(url: string): Promise<string> {
-  for (let attempt = 0; ; attempt++) {
-    try {
-      const res = await fetch(url, {
-        headers: { 'user-agent': 'chrome-update-audit (static file check)' },
-        signal: AbortSignal.timeout(20_000),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return decode(await res.arrayBuffer(), res.headers.get('content-type') ?? '');
-    } catch (e) {
-      if (attempt >= 1 || /HTTP 4\d\d/.test((e as Error).message)) throw e;
-      await new Promise((r) => setTimeout(r, 2000));
-    }
-  }
-}
 
 async function collectFiles(file: string, into: Map<string, Source>, skipped: AuditResult['skipped'], errors: string[], pageNames: string[]) {
   const list = JSON.parse(fs.readFileSync(file, 'utf8')) as FilesList;

@@ -1,4 +1,5 @@
 // 점검 결과(result.json)를 사람이 볼 항목으로 정리한다. 팀룸 알림(notify.ts)과 현황 시트(sheet.ts)가 함께 쓴다.
+import fs from 'node:fs';
 import type { AuditResult } from './scan.ts';
 
 /** 네이트 파일에서 찾은 한 건 (외부 파일은 고칠 수 없어 넣지 않는다) */
@@ -117,4 +118,12 @@ export function itemsOf(r: AuditResult): Item[] {
 export function kst(iso: string): string {
   const d = new Date(new Date(iso).getTime() + 9 * 3600_000);
   return d.toISOString().slice(0, 16).replace('T', ' ');
+}
+
+/** Claude가 쓴 해결 방법 제안: 키(기능|파일|코드) → 제안 (비공개 저장소 state/fixes.json) */
+export type FixStore = Record<string, { fix: string; at: string }>;
+
+export function readFixes(file: string | undefined): FixStore {
+  if (!file || !fs.existsSync(file)) return {};
+  return JSON.parse(fs.readFileSync(file, 'utf8')) as FixStore;
 }

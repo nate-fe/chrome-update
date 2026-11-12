@@ -1,14 +1,14 @@
 // 점검 결과를 Google 스프레드시트 현황판으로 보낸다. 시트 쪽은 Apps Script 웹 앱이 받아서 고친다.
 // (Apps Script 코드와 설정 방법은 비공개 저장소 chrome-update-audit의 apps-script/ 에 있다)
 //
-// 실행: node scripts/audit/sheet.ts <result.json> [--dry-run]
+// 실행: node scripts/audit/sheet.ts <result.json> [--fixes fixes.json] [--dry-run]
 // 환경 변수: SHEET_WEBHOOK_URL(Apps Script 웹 앱 주소), SHEET_SECRET(Apps Script setup()이 만든 비밀값)
 //  - 둘 중 하나라도 없으면 건너뛴다.
 //  - 검사 오류가 있는 결과는 보내지 않는다 (일부 파일이 빠진 결과로 고치면 '해결'로 잘못 옮겨진다).
 //  - --dry-run: 보내지 않고 보낼 내용만 출력한다.
 import fs from 'node:fs';
 import type { AuditResult } from './scan.ts';
-import { itemsOf, kst } from './items.ts';
+import { itemsOf, kst, readFixes, type FixStore } from './items.ts';
 
 /** 시트 한 줄: 같은 키(같은 기능·파일·코드)는 줄 번호가 여러 개여도 한 줄로 묶는다 */
 export type SheetRow = {
@@ -20,6 +20,8 @@ export type SheetRow = {
   file: string;
   lines: string;
   snippet: string;
+  /** Claude가 쓴 해결 방법 제안 (없으면 빈 칸. 시트는 빈 칸이면 전에 받은 제안을 그대로 둔다) */
+  fix: string;
   pages: string;
 };
 
@@ -31,7 +33,7 @@ export type SheetPayload = {
   rows: SheetRow[];
 };
 
-function rowsOf(r: AuditResult): SheetRow[] {
+function rowsOf(r: AuditResult, fixes: FixStore): SheetRow[] {
   const byKey = new Map<string, SheetRow & { nums: number[] }>();
   for (const it of itemsOf(r)) {
     const prev = byKey.get(it.key);
@@ -48,6 +50,7 @@ function rowsOf(r: AuditResult): SheetRow[] {
       file: it.file,
       lines: '',
       snippet: it.snippet ?? '',
+      fix: fixes[it.key]?.fix ?? '',
       pages: it.pages.join(', '),
       nums: [it.line],
     });
@@ -55,10 +58,12 @@ function rowsOf(r: AuditResult): SheetRow[] {
   return [...byKey.values()].map(({ nums, ...row }) => ({ ...row, lines: nums.sort((a, b) => a - b).join(', ') }));
 }
 
-const file = process.argv.slice(2).find((a) => !a.startsWith('--'));
+const argv = process.argv.slice(2);
+const fixesAt = argv.indexOf('--fixes');
+const file = argv.find((a, i) => !a.startsWith('--') && (fixesAt < 0 || i !== fixesAt + 1));
 const DRY = process.argv.includes('--dry-run');
 if (!file) {
-  console.error('사용법: node scripts/audit/sheet.ts <result.json> [--dry-run]');
+  console.error('사용법: node scripts/audit/sheet.ts <result.json> [--fixes fixes.json] [--dry-run]');
   process.exit(1);
 }
 const result = JSON.parse(fs.readFileSync(file, 'utf8')) as AuditResult;
@@ -75,7 +80,7 @@ const payload: SheetPayload = {
   checkedAt: kst(result.at),
   files: result.files.length,
   pages: result.targets.length,
-  rows: rowsOf(result),
+  rows: rowsOf(result, readFixes(fixesAt >= 0 ? argv[fixesAt + 1] : undefined)),
 };
 
 if (DRY) {

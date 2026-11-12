@@ -103,6 +103,14 @@ jobs:
           body-path: pipeline-out/pr-body.md
           labels: ${{ steps.meta.outputs.status_only == 'true' && 'content,status-only' || 'content,needs-review' }}
 
+      # 새 버전이 들어간 PR이 새로 열리면 팀룸에 한 줄 알린다. 알림이 실패해도 PR은 그대로 둔다
+      - name: 새 버전 PR 팀룸 알림
+        if: steps.cpr.outputs.pull-request-operation == 'created' && steps.meta.outputs.status_only != 'true'
+        continue-on-error: true
+        env:
+          TEAMROOM_WEBHOOK_URL: ${{ secrets.TEAMROOM_WEBHOOK_URL }}
+        run: node scripts/pipeline/notify-pr.ts
+
       # GITHUB_TOKEN으로 병합하면 push 이벤트가 다른 워크플로를 깨우지 않으므로 배포를 직접 실행한다
       - name: 상태만 바뀐 PR은 바로 병합하고 배포
         if: steps.meta.outputs.status_only == 'true' && steps.cpr.outputs.pull-request-number
