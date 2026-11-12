@@ -1,0 +1,55 @@
+[
+  {
+    "slug": "sync-xhr",
+    "title": "동기 XHR",
+    "status": "deprecated",
+    "milestone": null,
+    "link": "https://developer.mozilla.org/ko/docs/Web/API/XMLHttpRequest_API/Synchronous_and_Asynchronous_Requests",
+    "guideKo": "`async: false`를 지우고 콜백이나 Promise로 바꾼다. jQuery로 `<script>`를 붙이는 대신 `document.createElement('script')`로 넣는다.",
+    "skipLibraries": true,
+    "scan": [
+      { "lang": "js", "pattern": "\\.open\\(\\s*[^,()]+,\\s*[^,()]+,\\s*(?:false|!1)\\s*[,)]", "level": "fix", "noteKo": "응답이 올 때까지 페이지가 멈추는 동기 요청(`open(…, false)`)이라 Chrome이 deprecated로 경고한다. 제거 일정은 없다" },
+      { "lang": "js", "pattern": "\\basync\\s*:\\s*(?:false|!1)(?![\\w$])", "level": "fix", "noteKo": "응답이 올 때까지 페이지가 멈추는 동기 요청(`async: false`)이라 Chrome이 deprecated로 경고한다. 제거 일정은 없다" },
+      { "lang": "js", "pattern": "\\$\\(\\s*['\"]<script\\b", "level": "fix", "noteKo": "jQuery로 붙인 `<script>`는 jQuery가 동기 XHR로 받아 실행한다. Chrome이 deprecated로 경고한다. 제거 일정은 없다" },
+      { "lang": "js", "pattern": "\\.(?:append|prepend|after|before|html|replaceWith)\\(\\s*['\"][^'\"]*<script\\b[^>]*\\bsrc\\s*=", "level": "fix", "noteKo": "jQuery로 붙인 `<script src>`는 jQuery가 동기 XHR로 받아 실행한다. Chrome이 deprecated로 경고한다. 제거 일정은 없다" }
+    ]
+  },
+  {
+    "slug": "unload-event",
+    "title": "unload 이벤트",
+    "status": "deprecated",
+    "milestone": null,
+    "link": "https://developer.chrome.com/docs/web-platform/deprecating-unload",
+    "guideKo": "`pagehide`나 `visibilitychange` 이벤트로 바꾼다.",
+    "skipLibraries": true,
+    "scan": [
+      { "lang": "js", "pattern": "addEventListener\\(\\s*['\"]unload['\"]", "level": "fix", "noteKo": "Chrome이 unload 이벤트를 단계적으로 없애고 있어 실행되지 않을 수 있다" },
+      { "lang": "js", "pattern": "\\bonunload\\s*=", "level": "fix", "noteKo": "Chrome이 unload 이벤트를 단계적으로 없애고 있어 실행되지 않을 수 있다" },
+      { "lang": "js", "pattern": "\\.(?:on|bind|one)\\(\\s*['\"]unload\\b", "level": "fix", "noteKo": "Chrome이 unload 이벤트를 단계적으로 없애고 있어 실행되지 않을 수 있다" }
+    ]
+  },
+  {
+    "slug": "document-domain",
+    "title": "`document.domain` 설정",
+    "status": "deprecated",
+    "milestone": 115,
+    "link": "https://developer.chrome.com/blog/document-domain-setter-deprecation",
+    "guideKo": "서브도메인 사이 통신은 `postMessage`로 바꾼다. 당장 바꾸기 어렵다면 응답 헤더 `Origin-Agent-Cluster: ?0`으로 임시로 유지할 수 있다.",
+    "skipLibraries": false,
+    "scan": [
+      { "lang": "js", "pattern": "\\bdocument\\.domain\\s*=(?!=)", "level": "fix", "noteKo": "Chrome 115부터 기본적으로 `document.domain` 설정이 무시되어 서브도메인 사이 접근이 막힌다" }
+    ]
+  },
+  {
+    "slug": "mutation-events",
+    "title": "Mutation Events 제거",
+    "status": "removed",
+    "milestone": 127,
+    "link": "https://developer.chrome.com/blog/mutation-events-deprecation",
+    "guideKo": "`MutationObserver`로 바꾼다.",
+    "skipLibraries": false,
+    "scan": [
+      { "lang": "js", "pattern": "\\bDOM(?:NodeInserted(?:IntoDocument)?|NodeRemoved(?:FromDocument)?|SubtreeModified|AttrModified|CharacterDataModified)\\b", "level": "fix", "noteKo": "`DOMNodeInserted` 같은 Mutation Events는 Chrome 127부터 발생하지 않는다" }
+    ]
+  }
+]

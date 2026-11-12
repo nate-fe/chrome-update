@@ -6,3 +6,6 @@ next-env.d.ts
 
 # 콘텐츠 파이프라인 중간 결과
 /pipeline-out
+
+# 서비스 점검 결과 (공개 저장소에 올리지 않는다)
+/audit-out

@@ -7,7 +7,7 @@
 // 채널: VERIFY_CHANNELS=chrome,chrome-beta (Playwright 채널 이름)
 import fs from 'node:fs';
 import path from 'node:path';
-import { chromium, type Browser } from 'playwright';
+import { chromium, type Browser, type Page } from 'playwright';
 import type { Feature, FeatureTest } from '../../src/lib/schema.ts';
 import { OUT, readFeatures, readLog, today, writeFeature, writeLog } from './lib.ts';
 
@@ -25,10 +25,19 @@ function previewDoc(f: Feature, withCode: boolean): string {
   return `<!doctype html><html><head><meta charset="utf-8"><style>${TOKENS}\n${p.css}\n${withCode ? f.exampleCode : ''}</style></head><body><div id="stage" style="display:inline-block;min-width:260px">${p.html}</div></body></html>`;
 }
 
+// about:blank은 보안 컨텍스트가 아니라 [SecureContext] API(navigator.install 등)가 안 보인다.
+// 가짜 https 주소를 가로채 HTML을 돌려주면 네트워크 없이 보안 컨텍스트에서 검사할 수 있다.
+const PAGE_URL = 'https://verify.test/';
+
+async function openDoc(page: Page, html: string): Promise<void> {
+  await page.route(PAGE_URL, (route) => route.fulfill({ contentType: 'text/html; charset=utf-8', body: html }));
+  await page.goto(PAGE_URL);
+}
+
 async function runTest(browser: Browser, test: FeatureTest): Promise<boolean | null> {
   const page = await browser.newPage();
   try {
-    await page.setContent('<!doctype html><html><body></body></html>');
+    await openDoc(page, '<!doctype html><html><body></body></html>');
     return await page.evaluate(async (t) => {
       try {
         if (t.kind === 'css') return CSS.supports(t.decl);
@@ -46,7 +55,7 @@ async function runTest(browser: Browser, test: FeatureTest): Promise<boolean | n
 async function shot(browser: Browser, html: string, file: string): Promise<Buffer> {
   const page = await browser.newPage({ viewport: { width: 480, height: 240 } });
   try {
-    await page.setContent(html);
+    await openDoc(page, html);
     const buf = await page.locator('#stage').screenshot({ animations: 'disabled' });
     fs.writeFileSync(file, buf);
     return buf;

@@ -46,7 +46,19 @@ Chrome 웹 플랫폼 변경사항을 한국어로 정리하는 Next.js 정적 �
   - HTML은 `exampleCode` 선택자와 맞춘다. `<a>`에 `href`를 넣지 않는다.
   - `<script>`, `on...=` 속성, `javascript:` 주소는 절대 쓰지 않는다 (페이지에 그대로 들어간다).
   - 바탕 CSS만 쓴다(크기·테두리·색). 색은 `var(--accent|--fg|--fg-dim|--line|--panel)`, 글꼴은 `var(--mono|--sans)`. 높이 120px 이내.
+- `scan` (impact가 `removed`·`changed`인 기능만): 서비스 코드에서 영향받는 곳을 찾는 규칙. `[{ "lang": "js"|"css"|"html", "pattern": "<정규식>", "level": "fix"|"check", "noteKo": "<걸렸을 때 보여 줄 한 줄>" }]`
+  - `fix` = 제거·deprecated라 고쳐야 함, `check` = 동작이 바뀌니 화면·성능 확인.
+  - 원문에 나온 API·속성·값 이름만 찾는다. `\b`로 단어 경계를 걸어 비슷한 이름이 걸리지 않게 한다 (JSON이라 역슬래시는 `\\b`).
+  - API가 그대로이고 찾을 코드가 없으면(내부 구현 변경 등) 넣지 않는다.
+  - 쓴 뒤 문제 코드 한 줄을 담은 임시 폴더로 `node scripts/audit/scan.ts <폴더>`를 돌려 걸리는지 확인한다.
 - `demo`, `before`, `after`는 `null`, `tags`는 `[]`, `baseline`은 모르면 `null`, `support`는 `{ "firefox": null, "safari": null }`, `review`는 `{ "by": null, "at": null }`.
+
+## 서비스 점검 (`scripts/audit/scan.ts`)
+
+- 기능 JSON의 `scan`과 `scripts/audit/legacy-rules.json` 규칙으로 CSS·JS를 검사해 `audit-out/report.html`로 만든다.
+- 서비스 점검은 **파일 목록 방식(`--files`)만** 쓴다. 네이트 페이지를 브라우저로 열거나 HTML을 받지 않는다 (PV·광고·통계에 잡히면 안 됨). 페이지 URL 방식은 사용자가 따로 요청할 때만 쓴다.
+- `legacy-rules.json`에는 Chrome 공식 문서로 deprecated·제거가 확인된 기능만 넣고, `link`에 그 문서를 적는다.
+- 점검 결과(`audit-out/`), 검사 대상 파일 목록(`files.json`), 팀룸 알림은 비공개 저장소 `nate-fe/chrome-update-audit`에서 다룬다. 이 공개 저장소에는 결과·대상 목록·웹훅 주소를 커밋하지 않는다.
 
 ## 그 밖의 약속
 

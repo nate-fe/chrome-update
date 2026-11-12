@@ -51,6 +51,14 @@
   "needsCheck": [
     "support"
   ],
+  "scan": [
+    {
+      "lang": "css",
+      "pattern": "\\banchors-(?:visible|valid)\\b",
+      "level": "fix",
+      "noteKo": "복수형 값은 deprecated 별칭이다. `anchor-visible`·`anchor-valid`로 바꾼다"
+    }
+  ],
   "sources": [
     "https://chromestatus.com/feature/5136123851571200",
     "https://chromestatus.com/release-notes/157",
