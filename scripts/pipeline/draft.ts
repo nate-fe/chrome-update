@@ -200,6 +200,15 @@ function setOutput(name: string, value: string) {
   fs.appendFileSync(process.env.GITHUB_OUTPUT, `${name}<<${end}\n${value}\n${end}\n`);
 }
 
+/**
+ * Actions 실행 화면 맨 위 요약에 뜨는 주석. 회사망에서 단계 로그가 열리지 않아도 이건 보인다.
+ * Actions 밖에서는 그냥 출력한다.
+ */
+function annotate(level: 'notice' | 'warning', text: string) {
+  const one = text.replace(/\r?\n/g, ' ');
+  console.log(process.env.GITHUB_ACTIONS ? `::${level} title=초안::${one}` : one);
+}
+
 const placeholder = (status: string) => ({
   // 화면 제목이 "Chrome 158 — <headlineKo>" 형태라 버전 번호는 넣지 않는다
   headlineKo: `${status === 'beta' ? '베타 ' : ''}변경사항 정리 중`,
@@ -252,8 +261,10 @@ if (cmd === 'input') {
   setOutput('count', String(work));
   if (work) {
     setOutput('prompt', prompt);
+    // $schema(draft 2020-12) 표시는 빼고 넘긴다 (검사기가 그 버전을 모르면 Claude 단계가 실패한다)
     // claude_args에 작은따옴표로 감싸 넣으므로 작은따옴표가 없어야 한다
-    setOutput('schema', JSON.stringify(z.toJSONSchema(AnswerSchema)).replaceAll("'", '’'));
+    const { $schema: _, ...schema } = z.toJSONSchema(AnswerSchema) as Record<string, unknown>;
+    setOutput('schema', JSON.stringify(schema).replaceAll("'", '’'));
   }
   console.log(`초안을 물을 후보 ${sources.length}개 (전체 ${log.candidates.length}개, 최대 ${MAX}개), 머리말 ${releases.length}개 → ${INPUT}`);
 } else if (cmd === 'apply') {
@@ -271,9 +282,9 @@ if (cmd === 'input') {
     }
     const parsed = AnswerSchema.safeParse(json);
     if (parsed.success) answer = parsed.data;
-    else console.warn(`Claude 답이 형식에 맞지 않아 쓰지 않음: ${parsed.error.message.slice(0, 300)}`);
-  } else {
-    console.log('Claude 답(DRAFTS)이 없어 초안 없이 진행합니다. 후보 목록만 PR에 남습니다.');
+    else annotate('warning', `Claude 답이 형식에 맞지 않아 쓰지 않음: ${parsed.error.message.slice(0, 300)}`);
+  } else if (input.candidates.length) {
+    annotate('warning', `Claude 답이 없어 초안 없이 진행합니다 (후보 ${input.candidates.length}개). 4-2 단계 경고를 확인하세요.`);
   }
 
   if (answer.drafts.length) {
@@ -313,8 +324,30 @@ if (cmd === 'input') {
   }
 
   writeLog(log);
-  console.log(`초안 ${log.drafted.length}건, 제외 ${log.skipped.length}건`);
+  if (raw) annotate('notice', `Claude 초안 반영: 실음 ${log.drafted.length}건, 제외 ${log.skipped.length}건 (답 ${answer.drafts.length}건)`);
+  else console.log(`초안 ${log.drafted.length}건, 제외 ${log.skipped.length}건`);
+} else if (cmd === 'claude-status') {
+  // Claude 단계가 실패했을 때 이유를 주석으로 남긴다 (회사망에서 단계 로그가 열리지 않아서)
+  const [outcome, file] = rest;
+  let detail = '실행 기록 없음 (토큰이 없거나 Action이 Claude를 시작하기 전에 멈췄을 수 있음)';
+  if (file && fs.existsSync(file)) {
+    try {
+      const msgs = JSON.parse(fs.readFileSync(file, 'utf8')) as Record<string, unknown>[];
+      const last = [...msgs].reverse().find((m) => m.type === 'result');
+      if (last) {
+        detail = [
+          `결과 ${String(last.subtype ?? '')}`,
+          `턴 ${String(last.num_turns ?? '?')}`,
+          last.structured_output ? '구조화 답 있음' : '구조화 답 없음',
+          String(last.result ?? (last.errors as unknown[] | undefined)?.join(' ') ?? '').slice(0, 400),
+        ].join(' · ');
+      }
+    } catch (e) {
+      detail = `실행 기록을 읽지 못함: ${(e as Error).message}`;
+    }
+  }
+  annotate(outcome === 'success' ? 'notice' : 'warning', `Claude 단계 ${outcome}: ${detail}`);
 } else {
-  console.error('사용법: node scripts/pipeline/draft.ts input [--max 15] | apply');
+  console.error('사용법: node scripts/pipeline/draft.ts input [--max 15] | apply | claude-status <outcome> <execution_file>');
   process.exit(1);
 }

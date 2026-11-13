@@ -77,6 +77,11 @@ jobs:
             --disallowedTools Bash,Read,Edit,Write,Glob,Grep,WebFetch,WebSearch,NotebookEdit,Task
             --json-schema '${{ steps.draftinput.outputs.schema }}'
 
+      # 회사망에서는 단계 로그가 열리지 않으므로 Claude 단계 결과를 실행 화면 요약의 주석으로 남긴다
+      - name: 4-2. Claude 결과 기록
+        if: always() && steps.claude.outcome != 'skipped' && steps.claude.outcome != ''
+        run: node scripts/pipeline/draft.ts claude-status "${{ steps.claude.outcome }}" "${{ steps.claude.outputs.execution_file }}"
+
       - name: 4-3. 초안 반영
         env:
           DRAFTS: ${{ steps.claude.outcome == 'success' && steps.claude.outputs.structured_output || '' }}
