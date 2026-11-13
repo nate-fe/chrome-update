@@ -19,7 +19,7 @@ import { sendTeamroom as send } from './teamroom.ts';
 /** 팀룸에 올리는 '수정 필요': 네이트 파일의 '고쳐야 함' (동작 변경 '확인 필요'는 현황 시트에만) */
 const itemsOf = (r: AuditResult): Item[] => allItems(r).filter((i) => i.level === 'fix');
 
-function buildMessage(cur: AuditResult, items: Item[], resolved: Item[], fixes: FixStore): string {
+function buildMessage(cur: AuditResult, items: Item[], fixes: FixStore): string {
   const lines = [`[Chrome 변경 점검] deprecated 관련 수정 필요 - ${items.length}건 · ${kst(cur.at)}`];
 
   const groups = new Map<string, Item[]>();
@@ -37,20 +37,13 @@ function buildMessage(cur: AuditResult, items: Item[], resolved: Item[], fixes: 
       byFile.set(it.file, e);
     }
     for (const [file, e] of byFile) {
-      lines.push(`· ${file} ${e.nums.sort((a, b) => a - b).join(', ')}줄`);
+      lines.push(`■ ${file} ${e.nums.sort((a, b) => a - b).join(', ')}줄`);
       for (const sn of e.snippets.slice(0, 3)) lines.push(`   ${sn}`);
       // Claude 제안은 여러 줄일 수 있어 줄마다 들여쓴다
       for (const fx of e.fixes.slice(0, 3)) {
         fx.split('\n').forEach((l, i) => lines.push(`   ${i === 0 ? '→ 해결(Claude 제안): ' : '  '}${l}`));
       }
     }
-  }
-
-  if (resolved.length) {
-    // 같은 파일의 여러 줄이 함께 해결되면 한 줄로
-    const done = [...new Set(resolved.map((it) => `${it.group} — ${it.file}`))];
-    lines.push('', `해결됨 ${done.length}건`);
-    for (const d of done) lines.push(`· ${d}`);
   }
 
   const external = cur.findings.filter((f) => !f.own && f.level === 'fix').length + cur.runtime.filter((w) => !w.own).length;
@@ -84,7 +77,7 @@ const prev = prevFile && fs.existsSync(prevFile) ? (JSON.parse(fs.readFileSync(p
 const outFile = path.join(path.dirname(curFile), 'message.txt');
 
 if (cur.errors.length) {
-  const text = [`${PREFIX}[Chrome 변경 점검] 점검 실패 · ${kst(cur.at)}`, '', ...cur.errors.map((e) => `· ${e}`), '', '배포로 파일 주소가 바뀌었거나(files.json 수정 필요) 일시적인 접속 문제일 수 있습니다. 이번 결과는 비교에 쓰지 않습니다.']
+  const text = [`${PREFIX}[Chrome 변경 점검] 점검 실패 · ${kst(cur.at)}`, '', ...cur.errors.map((e) => `■ ${e}`), '', '배포로 파일 주소가 바뀌었거나(files.json 수정 필요) 일시적인 접속 문제일 수 있습니다. 이번 결과는 비교에 쓰지 않습니다.']
     .join('\n');
   fs.writeFileSync(outFile, text + '\n');
   console.log(text);
@@ -100,7 +93,7 @@ const fresh = new Set(items.filter((i) => !prevKeys.has(i.key)).map((i) => i.key
 const resolved = prevItems.filter((i) => !curKeys.has(i.key));
 
 const unchanged = fresh.size === 0 && resolved.length === 0;
-const text = PREFIX + buildMessage(cur, items, resolved, readFixes(FIXES_FILE));
+const text = PREFIX + buildMessage(cur, items, readFixes(FIXES_FILE));
 fs.writeFileSync(outFile, text + '\n');
 console.log(text);
 
