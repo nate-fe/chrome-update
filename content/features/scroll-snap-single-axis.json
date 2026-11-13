@@ -1,0 +1,51 @@
+{
+  "slug": "scroll-snap-single-axis",
+  "chromestatusId": 5086608215900160,
+  "title": "단일 축 스크롤 컨테이너의 스크롤 스냅",
+  "category": "css",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`overflow: auto clip` 같은 단일 축 스크롤 컨테이너가 스크롤 스냅 영역을 축별로 나눠 처리하고, 스크롤하지 않는 축은 가장 가까운 상위 스크롤 컨테이너로 넘긴다.",
+  "whyKo": "이전에는 단일 축 컨테이너가 스크롤할 수 없는 축까지 스냅 영역을 붙잡아 그 축 정렬이 동작하지 않았다.",
+  "exampleLang": "css",
+  "exampleCode": ".row {\n  overflow: auto clip;\n  scroll-snap-type: x mandatory;\n}\n.row > .item { scroll-snap-align: start; }",
+  "guideKo": "단일 축 컨테이너 안에서 양 축 스냅 정렬을 쓰던 곳은 상위 컨테이너의 스냅 동작을 확인한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "scan": [
+    {
+      "lang": "css",
+      "pattern": "\\bscroll-snap-align\\b",
+      "level": "check",
+      "noteKo": "단일 축 스크롤 컨테이너 안이라면 스냅 정렬이 축별로 처리되니 확인한다"
+    }
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5086608215900160",
+    "https://drafts.csswg.org/css-scroll-snap-1"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

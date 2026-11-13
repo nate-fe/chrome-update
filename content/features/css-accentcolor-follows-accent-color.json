@@ -1,0 +1,55 @@
+{
+  "slug": "css-accentcolor-follows-accent-color",
+  "chromestatusId": 6207138742534144,
+  "title": "`AccentColor`가 `accent-color` 값을 따름",
+  "category": "css",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`AccentColor`와 `AccentColorText` 키워드가 OS 강조색만이 아니라 요소에 적용된 `accent-color` 값을 반영한다.",
+  "whyKo": "이전에는 `accent-color: auto`일 때만 OS 강조색을 돌려주고 그 외에는 기본값이어서 쓸모가 적었다. 이제 폼 컨트롤에 쓴 강조색을 다른 커스텀 스타일에서도 같은 키워드로 가져다 쓸 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": ".badge {\n  accent-color: tomato;\n  background: AccentColor;\n  color: AccentColorText;\n}",
+  "guideKo": "이전 동작에 기대어 `AccentColor`를 쓴 코드는 `accent-color` 값에 따라 색이 달라지므로 화면을 확인한다. 미지원 브라우저를 위해 `background`에 고정 색을 먼저 적어 둔다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "preview": {
+    "html": "<span class=\"badge\">Badge</span>",
+    "css": ".badge { display: inline-block; padding: 6px 14px; border-radius: 999px; font-family: var(--sans); }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "scan": [
+    {
+      "lang": "css",
+      "pattern": "\\bAccentColor(Text)?\\b",
+      "level": "check",
+      "noteKo": "`AccentColor`·`AccentColorText`가 이제 `accent-color` 값을 따르므로 색이 달라지지 않는지 확인한다"
+    }
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/6207138742534144",
+    "https://www.w3.org/TR/css-color-4/#css-system-colors"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "css-property-optional-descriptors",
+  "chromestatusId": 5168674259468288,
+  "title": "`@property` 디스크립터 생략 허용",
+  "category": "css",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`@property` 규칙과 `CSS.registerProperty()`에서 모든 디스크립터를 생략할 수 있고, 생략하면 범용 syntax, 상속, 보장된 무효 초기값이 기본이 된다.",
+  "whyKo": "이전에는 `syntax`와 `inherits`를 매번 적어야 했고 타입이 있는 속성은 `initial-value`도 필요했다. 이제 `initial-value`를 빼고 사용처마다 `var()` 폴백을 쓸 수 있다.",
+  "exampleLang": "css",
+  "exampleCode": "@property --tilt {\n  syntax: \"<angle>\";\n}\n.card {\n  rotate: var(--tilt, 3deg);\n}",
+  "guideKo": "미지원 브라우저에서는 `initial-value` 없는 규칙이 무효가 되므로 필요하면 `initial-value`를 함께 적는다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "preview": {
+    "html": "<div class=\"card\">card</div>",
+    "css": ".card { width: 80px; padding: 14px; margin: 16px; text-align: center; border: 1px solid var(--line); background: var(--panel); color: var(--fg); font-family: var(--mono); }"
+  },
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5168674259468288",
+    "https://drafts.css-houdini.org/css-properties-values-api-1/#at-property-rule"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

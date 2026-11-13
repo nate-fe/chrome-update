@@ -1,0 +1,57 @@
+{
+  "slug": "sw-static-routing-cancel-typeerror",
+  "chromestatusId": 5124748525830144,
+  "title": "서비스 워커 정적 라우팅 취소 오류 메시지",
+  "category": "js",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`race-network-and-fetch-handler`로 경쟁한 `fetch(event.request)`가 헤더 도착 전에 취소되면 `Failed to fetch` 대신 취소 전용 `TypeError` 메시지로 거부된다.",
+  "whyKo": "내비게이션 프리로드의 `preloadResponse`와 같은 방식이라 예상된 취소와 실제 네트워크 오류를 구분해 오류 로그를 줄일 수 있다.",
+  "exampleLang": "js",
+  "exampleCode": "try {\n  await fetch(event.request);\n} catch (e) {\n  if (!/was cancelled before/.test(e.message)) report(e);\n}",
+  "guideKo": "`Failed to fetch` 문자열로 오류를 분류하던 코드는 새 메시지를 함께 처리한다. 메시지 전문은 원문에서 확인한다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "exampleCode"
+  ],
+  "scan": [
+    {
+      "lang": "js",
+      "pattern": "\\brace-network-and-fetch-handler\\b",
+      "level": "check",
+      "noteKo": "취소된 `fetch()`의 `TypeError` 메시지가 바뀌었으니 오류 분류 코드를 확인한다"
+    },
+    {
+      "lang": "js",
+      "pattern": "['\"]Failed to fetch['\"]",
+      "level": "check",
+      "noteKo": "메시지 문자열로 오류를 구분한다면 새 취소 메시지도 처리하는지 확인한다"
+    }
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5124748525830144",
+    "https://w3c.github.io/ServiceWorker/#dom-routersourceenum-race-network-and-fetch-handler"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "slug": "mediasession-active-promise",
+  "chromestatusId": 5188639100370944,
+  "title": "`setMicrophoneActive()`·`setCameraActive()`가 Promise 반환",
+  "category": "js",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`navigator.mediaSession.setMicrophoneActive()`와 `setCameraActive()`가 `undefined` 대신 `Promise<undefined>`를 돌려준다.",
+  "whyKo": "문서가 fully active이면 `undefined`로 이행하고, 아니면 `InvalidStateError`로 거부된다. 이전에는 반환값이 없어 결과를 기다릴 수 없었다.",
+  "exampleLang": "js",
+  "exampleCode": "try {\n  await navigator.mediaSession.setMicrophoneActive(false);\n} catch (e) {\n  if (e.name === 'InvalidStateError') { /* 비활성 문서 */ }\n}",
+  "guideKo": "반환값을 쓰지 않던 기존 호출은 그대로 동작하지만, 거부된 Promise가 처리되지 않을 수 있으므로 `catch`를 붙인다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "scan": [
+    {
+      "lang": "js",
+      "pattern": "\\bset(Microphone|Camera)Active\\b",
+      "level": "check",
+      "noteKo": "반환값이 Promise로 바뀌어 거부 처리(`catch`)가 필요한지 확인한다"
+    }
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5188639100370944",
+    "https://w3c.github.io/mediasession/#dom-mediasession-setmicrophoneactive"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

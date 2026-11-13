@@ -1,0 +1,43 @@
+{
+  "slug": "prerender-cross-origin-iframes",
+  "chromestatusId": 5112398709129216,
+  "title": "크로스 오리진 iframe 프리렌더링",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "최상위 문서의 응답에 `Supports-Loading-Mode: prerender-cross-origin-frames` 헤더가 있으면 크로스 오리진 iframe까지 프리렌더링한다.",
+  "whyKo": "기본적으로 프리렌더링은 페이지가 활성화될 때까지 크로스 오리진 iframe 로딩을 미룬다. 결제나 임베드처럼 iframe이 핵심인 페이지에서는 이 헤더로 프리렌더링 효과를 온전히 얻는다.",
+  "exampleLang": "js",
+  "exampleCode": "// 서버: 프리렌더 대상 페이지의 응답 헤더\nres.setHeader(\n  'Supports-Loading-Mode',\n  'prerender-cross-origin-frames'\n);",
+  "guideKo": "미지원 브라우저에서는 헤더가 무시되어 기존대로 iframe 로딩이 미뤄진다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5112398709129216",
+    "https://wicg.github.io/nav-speculation/prerendering.html"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

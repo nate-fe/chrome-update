@@ -1,0 +1,45 @@
+{
+  "slug": "speech-recognition-result-timestamps",
+  "chromestatusId": 5811907077472256,
+  "title": "`SpeechRecognitionResult` 타임스탬프",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`SpeechRecognitionResult`에 인식된 발화의 시작·끝 시각을 초 단위로 알려 주는 `speechStartTime`, `speechEndTime`이 추가된다.",
+  "whyKo": "이전에는 인식된 문장이 오디오 어디에 해당하는지 알 수 없어 자막 큐를 만들거나 문장을 눌러 해당 위치로 이동하는 기능을 만들기 어려웠다.",
+  "exampleLang": "js",
+  "exampleCode": "rec.onresult = (e) => {\n  const r = e.results[e.resultIndex];\n  const { speechStartTime: s, speechEndTime: t } = r;\n  const cue = new VTTCue(s, t, r[0].transcript);\n  track.addCue(cue);\n};",
+  "guideKo": "미지원 브라우저에서는 값이 `undefined`이므로 있을 때만 큐를 만든다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "js",
+    "expr": "typeof SpeechRecognitionResult !== 'undefined' && 'speechStartTime' in SpeechRecognitionResult.prototype"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5811907077472256",
+    "https://github.com/WebAudio/web-speech-api/pull/192"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}
