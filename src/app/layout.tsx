@@ -25,7 +25,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const { stable, beta, nextStableDate } = getSchedule();
 
   const groups: NavGroup[] = [
-    { title: 'Explorer', items: [{ href: '/', label: 'README', ext: '.md' }] },
+    {
+      title: 'Explorer',
+      items: [
+        // 네이트 서비스 점검 현황 시트 (회사 Google 계정 중 권한 있는 사람만 열림)
+        {
+          href: 'https://docs.google.com/spreadsheets/d/1tdWlYgMKOecR9dCHwnzZr_FiBc5hiqrOHql7WJigumw/edit?usp=sharing',
+          label: 'NATE 서비스 현황 시트',
+          external: true,
+        },
+        { href: '/', label: 'README', ext: '.md' },
+      ],
+    },
     {
       title: 'releases/',
       items: releases.map((r) => ({

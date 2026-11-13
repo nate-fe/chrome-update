@@ -41,7 +41,8 @@ export function Crumb() {
   return <span className="crumb">~{path === '/' ? '/README.md' : path}</span>;
 }
 
-export type NavItem = { href: string; label: string; ext?: string; pill?: React.ReactNode };
+/** external: 사이트 밖 주소. 새 탭으로 연다 */
+export type NavItem = { href: string; label: string; ext?: string; pill?: React.ReactNode; external?: boolean };
 export type NavGroup = { title: string; items: NavItem[] };
 
 export function SidebarNav({ groups }: { groups: NavGroup[] }) {
@@ -51,15 +52,24 @@ export function SidebarNav({ groups }: { groups: NavGroup[] }) {
       {groups.map((g) => (
         <div key={g.title} style={{ display: 'contents' }}>
           <h2>{g.title}</h2>
-          {g.items.map((it) => (
-            <Link key={it.href} href={it.href} aria-current={path === it.href ? 'page' : undefined}>
-              <span>
-                {it.label}
-                {it.ext && <span className="ext">{it.ext}</span>}
-              </span>
-              {it.pill && <span className="pill">{it.pill}</span>}
-            </Link>
-          ))}
+          {g.items.map((it) =>
+            it.external ? (
+              <a key={it.href} href={it.href} target="_blank" rel="noopener noreferrer">
+                <span>{it.label}</span>
+                <span className="pill muted" aria-label="새 탭에서 열림">
+                  ↗
+                </span>
+              </a>
+            ) : (
+              <Link key={it.href} href={it.href} aria-current={path === it.href ? 'page' : undefined}>
+                <span>
+                  {it.label}
+                  {it.ext && <span className="ext">{it.ext}</span>}
+                </span>
+                {it.pill && <span className="pill">{it.pill}</span>}
+              </Link>
+            ),
+          )}
         </div>
       ))}
     </nav>

@@ -43,30 +43,34 @@ node scripts/audit/scan.ts https://www.nate.com/  # 페이지를 열어 검사 �
 GitHub Actions가 매일 09:02(한국 시간)경에 다음을 합니다.
 
 1. 새 버전 추가, 베타 → stable 전환, 출시 연기를 감지한다.
-2. 실제 Chrome으로 지원 여부와 미리보기를 검사한다.
-3. 결과를 PR(`content/auto-update` 브랜치)로 올린다.
+2. 새 기능 후보가 있으면 Claude가 한국어 초안(기능 JSON, 제외 이유, 버전 머리말, `scan` 규칙)을 쓴다.
+3. 실제 Chrome으로 지원 여부와 미리보기를 검사한다.
+4. 결과를 PR(`content/auto-update` 브랜치)로 올린다.
 
 - 상태만 바뀐 PR은 자동으로 병합·배포됩니다.
 - 새 버전이 들어간 PR은 사람이 정리하고 병합해야 배포됩니다. 그동안 자동 실행은 쉽니다.
 - 새 버전이 들어간 PR이 새로 열리면 네이트온 팀룸으로 "[Chrome 변경 정리]" 제목과 "Chrome 159 버전이 나와 정리가 필요합니다." 두 줄을 보냅니다 (`scripts/pipeline/notify-pr.ts`). 새 버전이 없는 PR은 알리지 않습니다.
-- 비용 때문에 Claude API 키는 쓰지 않습니다. 새 기능 내용은 사람이 채웁니다.
+- **초안은 구독 토큰으로 씁니다** (Claude Code Action + `CLAUDE_CODE_OAUTH_TOKEN`). API 요금은 들지 않고 Claude 구독 사용량에서 차감됩니다. 원문을 지시문에 바로 넣고 도구는 막아 한 번에 답하게 합니다. 한 번에 최대 15개 후보입니다 (`scripts/pipeline/draft.ts`).
+- 토큰이 없거나 이 단계가 실패하면 예전처럼 초안 없이 후보 목록만 PR에 남습니다.
+- **AI 초안이라 그대로 병합하지 않습니다.** 원문과 대조하고 `needsCheck`에 남은 부분을 확인한 뒤 병합합니다.
 
 **처음 한 번 설정**
 
 1. Settings → Pages → Source를 **GitHub Actions**로 바꾼다.
 2. Settings → Actions → General에서 **Allow GitHub Actions to create and approve pull requests**를 켠다.
 3. Settings → Secrets and variables → Actions에 **`TEAMROOM_WEBHOOK_URL`**(네이트온 팀룸 웹훅)을 넣는다. 없으면 팀룸 알림만 건너뜁니다.
-4. Actions → **콘텐츠 자동 업데이트** → Run workflow로 첫 실행을 한다.
+4. 같은 곳에 **`CLAUDE_CODE_OAUTH_TOKEN`**을 넣는다. Claude 구독(Pro/Max) 계정으로 로그인된 PC에서 `claude setup-token`을 실행해 나온 토큰이다 (네이트 점검 저장소에 넣은 것과 같은 값을 써도 된다). 없으면 초안 단계만 건너뜁니다.
+5. Actions → **콘텐츠 자동 업데이트** → Run workflow로 첫 실행을 한다.
 
 ## 새 버전이 나오면 할 일
 
-자동 PR이 열리면(약 2주마다), 이 프로젝트를 Claude Code로 열고 이렇게 말합니다.
+자동 PR이 열리면(약 2주마다) 초안이 이미 들어 있습니다. 이 프로젝트를 Claude Code로 열고 이렇게 말합니다.
 
 ```
-158 정리해줘
+158 검수해줘
 ```
 
-Claude Code가 `CLAUDE.md`의 절차대로 후보를 정리하고, 결과를 보고한 뒤 커밋할지 묻습니다. 승인한 뒤 PR을 병합하면 배포됩니다.
+Claude Code가 `CLAUDE.md`의 절차대로 초안을 원문과 대조해 고치고, 남은 후보가 있으면 마저 정리한 뒤 결과를 보고하고 커밋할지 묻습니다. 승인한 뒤 PR을 병합하면 배포됩니다. 초안이 없는 PR(토큰 없음·실패)이면 "158 정리해줘"로 처음부터 정리합니다.
 
 직접 할 때는 PR 본문의 "아직 정리하지 않은 후보"마다 다음 중 하나를 합니다.
 

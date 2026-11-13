@@ -5,11 +5,13 @@ Chrome 웹 플랫폼 변경사항을 한국어로 정리하는 Next.js 정적 �
 
 ## 운영 방식
 
-- Claude API 키 없이 운영한다 (비용 때문). `ANTHROPIC_API_KEY`를 쓰거나 `draft.ts`로 API를 호출하지 않는다.
-- GitHub Actions가 매일 새 버전·상태 변경을 감지해 `content/auto-update` 브랜치로 PR을 연다. 새 기능 내용은 사람이(= Claude Code와 함께) 채운다.
+- Claude API 키 없이 운영한다 (비용 때문). `ANTHROPIC_API_KEY`를 쓰지 않는다.
+- GitHub Actions가 매일 새 버전·상태 변경을 감지해 `content/auto-update` 브랜치로 PR을 연다. 새 기능 후보가 있으면 구독 토큰(`CLAUDE_CODE_OAUTH_TOKEN`)으로 Claude Code Action이 초안을 쓴다 (`scripts/pipeline/draft.ts input`/`apply`). 초안은 사람이(= Claude Code와 함께) 검수한 뒤 병합한다.
 - 저장소: `nate-fe/chrome-update`. 커밋·푸시·PR 병합은 사용자가 요청할 때만 한다.
 
-## "새 버전 정리해줘" / "158 정리해줘" 요청을 받으면
+## "새 버전 정리해줘" / "158 정리해줘" / "158 검수해줘" 요청을 받으면
+
+자동 PR에 Claude 초안이 이미 있으면(PR 본문 "새 기능 초안", "싣지 않기로 한 기능") 처음부터 쓰지 않고 **검수**한다: 초안마다 3번처럼 원문을 읽어 아래 기준·규칙과 대조해 고치고, `pipeline-state.json`의 "자동 제외" 판단도 확인한다. 남은 후보만 새로 정리한다.
 
 1. **작업 브랜치 정하기**: `git fetch` 후 `origin/content/auto-update` 브랜치가 있으면(= 자동 PR이 열려 있으면) 그 브랜치에서 작업한다. 없으면 `node scripts/pipeline/detect.ts`를 돌려 새 버전·상태 변경을 먼저 반영한다.
 2. **후보 목록**: `node scripts/pipeline/detect.ts` 출력의 "후보" 줄, 또는 자동 PR 본문의 "아직 정리하지 않은 후보"가 대상이다.

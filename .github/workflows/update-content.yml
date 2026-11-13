@@ -55,10 +55,32 @@ jobs:
       - name: 1. 감지 (Chromium Dash · ChromeStatus)
         run: node scripts/pipeline/detect.ts
 
-      - name: 4. 한국어 초안 (Claude API)
+      # 4. 한국어 초안: 구독 토큰으로 Claude Code Action을 쓴다 (API 요금 없음, 구독 사용량에서 차감)
+      #    원문을 지시문에 바로 넣고 도구는 막아, 파일을 읽거나 고치지 않고 한 번에 JSON으로 답하게 한다.
+      #    토큰이 없거나 실패하면 초안 없이 후보 목록만 PR에 남긴다.
+      - name: 4-1. 초안을 물을 후보 고르기
+        id: draftinput
+        run: node scripts/pipeline/draft.ts input --max 15
+
+      - name: 4-2. 한국어 초안 (Claude)
+        id: claude
+        if: steps.draftinput.outputs.count != '' && steps.draftinput.outputs.count != '0'
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: ${{ steps.draftinput.outputs.prompt }}
+          claude_args: |
+            --model sonnet
+            --max-turns 3
+            --disallowedTools Bash,Read,Edit,Write,Glob,Grep,WebFetch,WebSearch,NotebookEdit,Task
+            --json-schema '${{ steps.draftinput.outputs.schema }}'
+
+      - name: 4-3. 초안 반영
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: node scripts/pipeline/draft.ts
+          DRAFTS: ${{ steps.claude.outcome == 'success' && steps.claude.outputs.structured_output || '' }}
+        run: node scripts/pipeline/draft.ts apply
 
       - name: 스키마 검사 · 빌드
         run: npm run typecheck && npm run build
