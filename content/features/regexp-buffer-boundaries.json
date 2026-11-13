@@ -1,0 +1,45 @@
+{
+  "slug": "regexp-buffer-boundaries",
+  "chromestatusId": 5187917373898752,
+  "title": "정규식 버퍼 경계 `\\A`·`\\z`·`\\Z`",
+  "category": "js",
+  "impact": "new",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "유니코드 모드 정규식에서 `\\A`, `\\z`, `\\Z`로 입력 전체의 시작과 끝을 나타낸다.",
+  "whyKo": "`^`와 `$`는 `m` 플래그에 따라 의미가 달라졌다. 이제 플래그와 무관하게 문자열의 시작·끝을 가리키는 표기를 쓸 수 있다.",
+  "exampleLang": "js",
+  "exampleCode": "const re = /\\Afoo\\z/u;\nre.test('foo');   // true\nre.test('foo\\n'); // false",
+  "guideKo": "미지원 브라우저에서는 `u` 모드의 `\\A`가 문법 오류가 되므로 쓰기 전에 지원 여부를 확인하거나 `(?-m:^)` 대신 `m` 없는 `^`를 쓴다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": {
+    "kind": "js",
+    "expr": "(() => { try { new RegExp('\\\\A', 'u'); return true; } catch { return false; } })()"
+  },
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support"
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5187917373898752",
+    "https://tc39.es/proposal-regexp-buffer-boundaries"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}

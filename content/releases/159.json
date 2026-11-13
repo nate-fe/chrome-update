@@ -2,6 +2,6 @@
   "milestone": 159,
   "status": "beta",
   "stableDate": "2026-12-08",
-  "headlineKo": "베타 변경사항 정리 중",
-  "summaryKo": "새 기능을 ChromeStatus 기준으로 정리하고 있습니다."
+  "headlineKo": "강조색 키워드는 값을 따르고, 정규식엔 경계 표기가",
+  "summaryKo": "`AccentColor`가 `accent-color` 값을 따르고, `@property` 디스크립터를 생략할 수 있으며, 정규식 `\\A`·`\\z`, 음성 인식 타임스탬프, 크로스 오리진 iframe 프리렌더링이 추가된다."
 }

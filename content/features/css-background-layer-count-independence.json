@@ -1,0 +1,57 @@
+{
+  "slug": "css-background-layer-count-independence",
+  "chromestatusId": 5144333908049920,
+  "title": "`background-*` 계산값의 레이어 수 독립",
+  "category": "css",
+  "impact": "changed",
+  "status": "beta",
+  "milestone": 159,
+  "tags": [],
+  "history": [
+    {
+      "milestone": 159,
+      "channel": "beta",
+      "note": "ChromeStatus: Enabled by default"
+    }
+  ],
+  "summaryKo": "`background-*` 개별 속성의 계산값이 `background-image` 레이어 수에 맞춰 반복·잘리지 않고 작성한 쉼표 값 개수를 그대로 유지한다.",
+  "whyKo": "반복·잘라내기는 사용값에서만 일어나야 한다는 CSS Values 4 명세에 Chrome을 맞춘 것이다. 렌더링은 그대로지만 `getComputedStyle`로 읽는 값이 달라질 수 있다.",
+  "exampleLang": "js",
+  "exampleCode": "const el = document.querySelector('.hero');\nel.style.cssText =\n  'background-image: url(a.png), url(b.png);' +\n  'background-size: 50%;';\nconst cs = getComputedStyle(el);\nconsole.log(cs.backgroundSize); // 작성한 값 개수 그대로",
+  "guideKo": "계산값의 쉼표 개수를 세어 레이어 수를 추정하는 코드가 있다면 `background-image` 개수로 판단하도록 고친다.",
+  "support": {
+    "firefox": null,
+    "safari": null
+  },
+  "baseline": null,
+  "featureTest": null,
+  "demo": null,
+  "before": null,
+  "after": null,
+  "needsCheck": [
+    "support",
+    "featureTest"
+  ],
+  "scan": [
+    {
+      "lang": "js",
+      "pattern": "getPropertyValue\\(\\s*['\"]background-(position|position-x|position-y|size|repeat|clip|origin|attachment)['\"]",
+      "level": "check",
+      "noteKo": "`background-*` 계산값의 쉼표 값 개수가 레이어 수와 달라질 수 있으니 확인한다"
+    },
+    {
+      "lang": "js",
+      "pattern": "\\.background(Position|Size|Repeat|Clip|Origin|Attachment)\\b",
+      "level": "check",
+      "noteKo": "계산값을 읽는 경우 `background-*` 값 개수가 달라질 수 있으니 확인한다"
+    }
+  ],
+  "sources": [
+    "https://chromestatus.com/feature/5144333908049920",
+    "https://drafts.csswg.org/css-values-4/#linked-properties"
+  ],
+  "review": {
+    "by": null,
+    "at": null
+  }
+}
