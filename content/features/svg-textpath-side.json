@@ -4,7 +4,7 @@
   "title": "SVG `<textPath>`의 `side` 속성",
   "category": "js",
   "impact": "new",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "`<textPath>`의 `side` 속성으로 글자가 경로의 어느 쪽을 따라갈지 고른다.",

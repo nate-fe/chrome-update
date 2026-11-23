@@ -4,7 +4,7 @@
   "title": "`<object>` · `<embed>` SVG에 `object-fit` 적용",
   "category": "css",
   "impact": "changed",
-  "status": "beta",
+  "status": "shipped",
   "milestone": 158,
   "tags": [],
   "history": [
@@ -12,6 +12,11 @@
       "milestone": 158,
       "channel": "beta",
       "note": "ChromeStatus: Enabled by default"
+    },
+    {
+      "milestone": 158,
+      "channel": "stable",
+      "note": "2026-11-17 stable 출시"
     }
   ],
   "summaryKo": "`<object>`, `<embed>`로 넣은 SVG 문서에도 `object-fit`, `object-position`이 `<img>`처럼 적용된다.",
